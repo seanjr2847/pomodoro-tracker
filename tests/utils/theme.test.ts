@@ -31,6 +31,43 @@ describe("calcDarkPrimary", () => {
     const result = calcDarkPrimary("6366f1");
     expect(result).toMatch(/^#[0-9a-f]{6}$/);
   });
+
+  it("handles green-dominant color (case g branch)", () => {
+    // #00ff00 → green is max channel
+    const result = calcDarkPrimary("#00ff00");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+    expect(result).not.toBe("#00ff00");
+  });
+
+  it("handles blue-dominant color (case b branch)", () => {
+    // #0000ff → blue is max channel
+    const result = calcDarkPrimary("#0000ff");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+    expect(result).not.toBe("#0000ff");
+  });
+
+  it("handles invalid hex gracefully", () => {
+    const result = calcDarkPrimary("invalid");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+  });
+
+  it("handles low-saturation color (l <= 0.5 branch)", () => {
+    // #333333 → dark gray, l < 0.5
+    const result = calcDarkPrimary("#333333");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+  });
+
+  it("handles high-saturation color (l > 0.5 branch)", () => {
+    // #aabbcc → light, l > 0.5
+    const result = calcDarkPrimary("#aabbcc");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+  });
+
+  it("handles red-dominant where g < b (ternary branch)", () => {
+    // #ff0033 → red max, g(0) < b(0x33) → triggers g < b ? 6 : 0
+    const result = calcDarkPrimary("#ff0033");
+    expect(result).toMatch(/^#[0-9a-f]{6}$/);
+  });
 });
 
 describe("getThemeColors", () => {
