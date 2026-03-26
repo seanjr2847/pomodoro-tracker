@@ -22,7 +22,7 @@ export function BlogCard({ post }: { post: Post }) {
             {frontmatter.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 dark:bg-white/10 dark:text-neutral-400"
+                className="mr-1 inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 last:mr-0 dark:bg-white/10 dark:text-neutral-400"
               >
                 {tag}
               </span>

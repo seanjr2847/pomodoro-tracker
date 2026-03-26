@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/shared/providers/ThemeProvider";
-import { PaddleProvider } from "@/features/billing/components/PaddleProvider";
+import { PaddleProvider } from "@/features/billing";
 import { generateSiteMetadata } from "@/features/seo";
 import "./globals.css";
 

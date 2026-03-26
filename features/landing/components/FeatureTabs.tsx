@@ -2,7 +2,14 @@
 
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
+import { BarChart3, Zap, Users } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger, Card, CardContent, Button } from "@/shared/ui";
+
+const tabIcons: Record<string, React.ReactNode> = {
+  Analytics: <BarChart3 className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
+  Automation: <Zap className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
+  Collaboration: <Users className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
+};
 
 export function FeatureTabs() {
   const { featureTabs } = siteConfig;
@@ -49,9 +56,7 @@ export function FeatureTabs() {
                     <div className="flex h-48 items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900">
                       <div className="text-center">
                         <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm dark:bg-neutral-700">
-                          <span className="text-lg">
-                            {tab.tab === "Analytics" ? "📊" : tab.tab === "Automation" ? "⚡" : "👥"}
-                          </span>
+                          {tabIcons[tab.tab] ?? <BarChart3 className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />}
                         </div>
                         <p className="text-sm text-muted-foreground">{tab.title}</p>
                       </div>

@@ -134,8 +134,8 @@ export const siteConfig: SiteConfig = {
   email: "hello@acme.example.com",
 
   theme: {
-    primary: "#6366f1",
-    gradient: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
+    primary: "#171717",
+    gradient: "linear-gradient(135deg, #171717 0%, #404040 50%, #171717 100%)",
   },
 
   banner: {
@@ -159,7 +159,7 @@ export const siteConfig: SiteConfig = {
       title: "Real-time Analytics",
       description:
         "Track every metric that matters with our powerful analytics dashboard.",
-      href: "/features/analytics",
+      href: "/#features",
       image: null,
     },
     {
@@ -167,7 +167,7 @@ export const siteConfig: SiteConfig = {
       title: "Smart Automation",
       description:
         "Automate repetitive tasks and focus on what truly matters.",
-      href: "/features/automation",
+      href: "/#features",
       image: null,
     },
     {
@@ -175,7 +175,7 @@ export const siteConfig: SiteConfig = {
       title: "Team Collaboration",
       description:
         "Work together seamlessly with built-in collaboration tools.",
-      href: "/features/collaboration",
+      href: "/#features",
       image: null,
     },
   ],
@@ -195,7 +195,7 @@ export const siteConfig: SiteConfig = {
       title: "Understand your users like never before",
       description:
         "Gain deep insights into user behavior with our powerful analytics engine. Track conversions, monitor engagement, and make data-driven decisions.",
-      cta: { text: "Learn more", href: "/features/analytics" },
+      cta: { text: "Learn more", href: "/#features" },
       image: null,
       cards: [
         {
