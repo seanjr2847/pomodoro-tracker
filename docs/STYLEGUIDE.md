@@ -185,7 +185,7 @@ import { cn } from "@/shared/utils/cn";
 
 ```typescript
 // Container — max-width + 반응형 padding
-<div className="mx-auto max-w-screen-lg px-3 lg:px-4 xl:px-0">
+<div className="mx-auto max-w-5xl px-3 lg:px-4 xl:px-0">
 
 // Grid — 반응형 columns
 <div className="grid grid-cols-2 gap-8 md:grid-cols-3 xl:grid-cols-4">

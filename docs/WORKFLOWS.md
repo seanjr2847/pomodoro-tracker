@@ -247,43 +247,28 @@ npx prisma migrate deploy
 
 ---
 
-## 9. OpenSpec 워크플로우
+## 9. 변경 관리
 
-프로젝트는 OpenSpec을 사용하여 변경 관리:
+작업 관리는 harness 루프를 따른다:
 
-### 4단계 라이프사이클
+1. `docs/TASKS.md`에서 미완료 항목 확인
+2. 하나만 선택해서 구현
+3. `./init.sh tidy` → `./init.sh verify`
+4. `progress/claude-progress.txt` 업데이트
+5. `docs/TASKS.md` 상태 업데이트 → git commit
 
-```
-/opsx:explore → /opsx:propose → /opsx:apply → /opsx:archive
-   탐색/조사      변경 제안       구현 실행      완료 아카이브
-```
-
-### 사용 가능한 스킬/커맨드
-
-| 스킬 | 커맨드 | 용도 |
-|------|--------|------|
-| `openspec-explore` | `/opsx:explore <topic>` | 아이디어 탐색, 조사, 요구사항 명확화 |
-| `openspec-propose` | `/opsx:propose <topic>` | 새 변경 제안 (proposal + design + specs + tasks) |
-| `openspec-apply-change` | `/opsx:apply <change>` | 태스크 목록에서 구현 실행 |
-| `openspec-archive-change` | `/opsx:archive <change>` | 완료된 변경 아카이브 |
-
-### 현재 상태
-
-- `nextjs-saas-boilerplate` change: **전체 태스크 완료** (15 섹션)
-- 아카이브 준비 완료
+자세한 루프는 CLAUDE.md 참조.
 
 ---
 
 ## 10. 검증 절차
 
-현재 사용 가능한 검증 수단:
-
 ```bash
-# TypeScript 타입 체크 + Next.js 빌드
-pnpm build
+# 포맷 + 린트 자동수정
+./init.sh tidy
 
-# ESLint 코드 품질 검사
-pnpm lint
+# 타입체크 + 빌드 + 린트 (커밋 전 필수)
+./init.sh verify
 ```
 
-> 자동화된 테스트는 아직 구축되지 않음 (TESTING.md 참조). 코드 변경 후 최소한 `pnpm build && pnpm lint`를 실행하여 검증.
+> 자동화된 테스트는 아직 구축되지 않음 (TESTING.md 참조). vitest 도입 시 init.sh verify에 추가 예정.
