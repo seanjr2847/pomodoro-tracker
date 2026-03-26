@@ -1,0 +1,1 @@
+export { generateSiteMetadata } from "./metadata";
