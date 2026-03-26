@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { AnimateOnScroll } from "@/shared/ui/animate-on-scroll";
 
 export function ValueProposition() {
   if (!siteConfig.value) return null;
@@ -7,21 +8,24 @@ export function ValueProposition() {
 
   return (
     <section className="mx-auto max-w-screen-lg px-3 py-20 text-center lg:px-4 xl:px-0">
-      <h2 className="font-sans text-3xl font-medium tracking-tight text-neutral-900 sm:text-4xl dark:text-white">
-        {title}
-      </h2>
-      <p className="mx-auto mt-4 max-w-xl text-lg text-neutral-700 dark:text-neutral-300">
-        {description}
-      </p>
+      <AnimateOnScroll animation="slide-up-fade">
+        <h2 className="font-sans text-3xl font-medium tracking-tight text-neutral-900 sm:text-4xl dark:text-white">
+          {title}
+        </h2>
+      </AnimateOnScroll>
+      <AnimateOnScroll animation="slide-up-fade" delay={100}>
+        <p className="mx-auto mt-4 max-w-xl text-lg text-neutral-700 dark:text-neutral-300">
+          {description}
+        </p>
+      </AnimateOnScroll>
       {highlights.length > 0 && (
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          {highlights.map((h) => (
-            <span
-              key={h}
-              className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 dark:bg-white/10 dark:text-neutral-300"
-            >
-              {h}
-            </span>
+          {highlights.map((h, i) => (
+            <AnimateOnScroll key={h} animation="scale-fade" delay={200 + i * 100}>
+              <span className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
+                {h}
+              </span>
+            </AnimateOnScroll>
           ))}
         </div>
       )}

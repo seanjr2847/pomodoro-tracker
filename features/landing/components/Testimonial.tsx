@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui";
+import { AnimateOnScroll } from "@/shared/ui/animate-on-scroll";
 import type { SiteConfig } from "@/config/site";
 
 type TestimonialData = SiteConfig["testimonials"][number];
@@ -12,6 +13,7 @@ export function Testimonial({ testimonial }: { testimonial: TestimonialData }) {
 
   return (
     <section className="mx-auto max-w-screen-lg px-3 lg:px-4 xl:px-0">
+      <AnimateOnScroll animation="fade-in">
       <div className="rounded-2xl border border-neutral-200 bg-white px-6 py-12 dark:border-white/10 dark:bg-neutral-900 sm:px-12">
         <blockquote className="text-center text-lg font-medium italic leading-relaxed text-neutral-700 dark:text-neutral-300 sm:text-xl">
           &ldquo;{testimonial.quote}&rdquo;
@@ -42,6 +44,7 @@ export function Testimonial({ testimonial }: { testimonial: TestimonialData }) {
           </div>
         </div>
       </div>
+      </AnimateOnScroll>
     </section>
   );
 }

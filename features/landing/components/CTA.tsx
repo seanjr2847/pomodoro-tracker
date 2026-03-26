@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Button } from "@/shared/ui";
+import { AnimateOnScroll } from "@/shared/ui/animate-on-scroll";
 import { GridPattern } from "@/shared/ui/grid-pattern";
 
 export function CTA() {
@@ -8,6 +9,7 @@ export function CTA() {
 
   return (
     <section className="mx-auto mt-32 max-w-screen-lg px-3 lg:px-4 xl:px-0">
+      <AnimateOnScroll animation="scale-fade">
       <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900">
         {/* Grid background with radial fade from top */}
         <GridPattern
@@ -43,6 +45,7 @@ export function CTA() {
           </div>
         </div>
       </div>
+      </AnimateOnScroll>
     </section>
   );
 }

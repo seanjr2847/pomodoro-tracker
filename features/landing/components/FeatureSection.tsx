@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button, Card, CardContent } from "@/shared/ui";
+import { AnimateOnScroll } from "@/shared/ui/animate-on-scroll";
 import { LucideIconByName } from "@/shared/ui/lucide-icon";
 import type { SiteConfig } from "@/config/site";
 
@@ -14,7 +15,7 @@ const cardGradients = [
 export function FeatureSection({ section }: { section: Section }) {
   return (
     <section id="features" className="mx-auto max-w-screen-lg px-3 lg:px-4 xl:px-0">
-      <div className="mx-auto max-w-xl text-center">
+      <AnimateOnScroll animation="slide-up-fade" className="mx-auto max-w-xl text-center">
         <span className="inline-block rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
           {section.badge}
         </span>
@@ -24,7 +25,7 @@ export function FeatureSection({ section }: { section: Section }) {
         <p className="mt-2 text-lg text-neutral-700 dark:text-neutral-300">
           {section.description}
         </p>
-      </div>
+      </AnimateOnScroll>
 
       {section.image && (
         <div className="mt-12 overflow-hidden rounded-xl border border-neutral-200 shadow-sm dark:border-white/10">
@@ -35,8 +36,8 @@ export function FeatureSection({ section }: { section: Section }) {
       {section.cards.length > 0 && (
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {section.cards.map((card, i) => (
+            <AnimateOnScroll key={card.title} animation="slide-up-fade" delay={i * 100}>
             <Card
-              key={card.title}
               className="relative overflow-hidden border-neutral-200 bg-white transition-shadow hover:shadow-md dark:border-white/10 dark:bg-neutral-900"
             >
               {/* Rotating conic gradient per card */}
@@ -70,6 +71,7 @@ export function FeatureSection({ section }: { section: Section }) {
                 )}
               </CardContent>
             </Card>
+            </AnimateOnScroll>
           ))}
         </div>
       )}
