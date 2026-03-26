@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/features/auth";
 import { DashboardSidebar, DashboardTopbar } from "@/features/landing";
 import { SessionProvider } from "next-auth/react";
+import { QueryProvider } from "@/shared/providers/QueryProvider";
 
 // Dev-only mock session for testing without OAuth
 const devSession =
@@ -28,13 +29,15 @@ export default async function DashboardLayout({
 
   return (
     <SessionProvider session={session}>
-      <div className="flex h-screen bg-background">
-        <DashboardSidebar />
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <DashboardTopbar />
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+      <QueryProvider>
+        <div className="flex h-screen bg-background">
+          <DashboardSidebar />
+          <div className="flex flex-1 flex-col overflow-hidden">
+            <DashboardTopbar />
+            <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+          </div>
         </div>
-      </div>
+      </QueryProvider>
     </SessionProvider>
   );
 }

@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { rateLimit } from "@/features/rate-limit";
+
+const apiLimiter = rateLimit({ windowMs: 60_000, max: 60 });
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
-
-  // Rate limit headers for API routes (informational)
-  // For distributed enforcement, integrate Upstash Redis:
-  // https://upstash.com/docs/oss/sdks/ts/ratelimit/overview
+  // Rate limit API routes
   if (request.nextUrl.pathname.startsWith("/api/")) {
-    response.headers.set("X-RateLimit-Limit", "100");
-    response.headers.set("X-RateLimit-Remaining", "99");
+    const blocked = apiLimiter(request);
+    if (blocked) return blocked;
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

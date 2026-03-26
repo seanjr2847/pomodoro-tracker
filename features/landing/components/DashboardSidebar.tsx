@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Settings, Menu, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Key, Settings, Menu, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { siteConfig } from "@/config/site";
 import { Button, Sheet, SheetContent, SheetTrigger, Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui";
@@ -14,6 +14,7 @@ const STORAGE_KEY = "sidebar-collapsed";
 
 const defaultItems = [
   { label: "Home", href: "/dashboard", icon: "Home" },
+  { label: "API Keys", href: "/dashboard/api-keys", icon: "Key" },
   { label: "Settings", href: "/dashboard/settings", icon: "Settings" },
 ];
 
@@ -22,7 +23,7 @@ function getMenuItems() {
   return [...defaultItems.slice(0, 1), ...extra, ...defaultItems.slice(1)];
 }
 
-const iconComponents: Record<string, typeof Home> = { Home, Settings };
+const iconComponents: Record<string, typeof Home> = { Home, Key, Settings };
 
 function MenuIcon({ name, className }: { name: string; className?: string }) {
   const BuiltIn = iconComponents[name];
