@@ -1,5 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { extractHeadings } from "@/features/blog/lib/mdx";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import fs from "fs";
+import { extractHeadings, getPostBySlug, getAllSlugs } from "@/features/blog/lib/mdx";
+
+vi.mock("fs");
 
 describe("extractHeadings", () => {
   it("extracts h2 headings", () => {
@@ -56,5 +59,73 @@ describe("extractHeadings", () => {
     const content = "## -Dash Start-";
     const headings = extractHeadings(content);
     expect(headings[0].id).toBe("dash-start");
+  });
+});
+
+describe("getPostBySlug", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns null for non-existent slug", () => {
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    expect(getPostBySlug("non-existent")).toBeNull();
+  });
+
+  it("reads and parses an MDX file", () => {
+    const mdxContent = [
+      "---",
+      "title: Test Post",
+      "description: A test",
+      "date: 2026-01-01",
+      "tags: [test]",
+      "---",
+      "",
+      "# Hello World",
+      "",
+      "Content here.",
+    ].join("\n");
+
+    vi.mocked(fs.existsSync).mockReturnValue(true);
+    vi.mocked(fs.readFileSync).mockReturnValue(mdxContent);
+
+    const post = getPostBySlug("test-post");
+    expect(post).not.toBeNull();
+    expect(post!.slug).toBe("test-post");
+    expect(post!.frontmatter.title).toBe("Test Post");
+    expect(post!.content).toContain("# Hello World");
+  });
+});
+
+describe("getAllSlugs", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns empty array when content dir does not exist", () => {
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    expect(getAllSlugs()).toEqual([]);
+  });
+
+  it("returns slugs from .mdx files only", () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true);
+    vi.mocked(fs.readdirSync).mockReturnValue([
+      "hello-world.mdx",
+      "getting-started.mdx",
+      "readme.md",
+      "notes.txt",
+    ] as unknown as ReturnType<typeof fs.readdirSync>);
+
+    const slugs = getAllSlugs();
+    expect(slugs).toEqual(["hello-world", "getting-started"]);
+  });
+
+  it("returns empty array when no .mdx files", () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true);
+    vi.mocked(fs.readdirSync).mockReturnValue([
+      "readme.md",
+    ] as unknown as ReturnType<typeof fs.readdirSync>);
+
+    expect(getAllSlugs()).toEqual([]);
   });
 });
