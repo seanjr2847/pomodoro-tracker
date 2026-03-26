@@ -11,7 +11,7 @@ vi.mock("@/features/billing/config/paddle", () => ({
 
 import { verifyPaddleSignature } from "@/features/billing/api/webhook";
 
-function createValidSignature(body: string, secret: string, ts = "1234567890") {
+function createValidSignature(body: string, secret: string, ts = String(Math.floor(Date.now() / 1000))) {
   const payload = `${ts}:${body}`;
   const hash = createHmac("sha256", secret).update(payload).digest("hex");
   return `ts=${ts};h1=${hash}`;
@@ -26,7 +26,7 @@ describe("verifyPaddleSignature", () => {
 
   it("returns false for an invalid hash", () => {
     const body = '{"event_type":"subscription.created"}';
-    const signature = "ts=1234567890;h1=invalidhash";
+    const signature = `ts=${Math.floor(Date.now() / 1000)};h1=invalidhash`;
     expect(verifyPaddleSignature(body, signature)).toBe(false);
   });
 
@@ -56,5 +56,19 @@ describe("verifyPaddleSignature", () => {
     const body = '{"data":"test"}';
     const signature = createValidSignature(body, "wrong-secret");
     expect(verifyPaddleSignature(body, signature)).toBe(false);
+  });
+
+  it("returns false for timestamps older than 5 minutes (replay protection)", () => {
+    const body = '{"event_type":"subscription.created"}';
+    const oldTs = String(Math.floor(Date.now() / 1000) - 600); // 10 min ago
+    const signature = createValidSignature(body, "test-webhook-secret", oldTs);
+    expect(verifyPaddleSignature(body, signature)).toBe(false);
+  });
+
+  it("returns true for recent timestamps within 5 minutes", () => {
+    const body = '{"event_type":"subscription.created"}';
+    const recentTs = String(Math.floor(Date.now() / 1000) - 60); // 1 min ago
+    const signature = createValidSignature(body, "test-webhook-secret", recentTs);
+    expect(verifyPaddleSignature(body, signature)).toBe(true);
   });
 });

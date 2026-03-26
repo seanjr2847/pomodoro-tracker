@@ -25,6 +25,11 @@ export function verifyPaddleSignature(
     const h1 = parts["h1"];
     if (!ts || !h1) return false;
 
+    // Replay protection: reject timestamps older than 5 minutes
+    const MAX_AGE_SECONDS = 300;
+    const timestampAge = Math.abs(Date.now() / 1000 - parseInt(ts, 10));
+    if (timestampAge > MAX_AGE_SECONDS) return false;
+
     const payload = `${ts}:${rawBody}`;
     const computedHash = createHmac("sha256", paddleConfig.webhookSecret)
       .update(payload)

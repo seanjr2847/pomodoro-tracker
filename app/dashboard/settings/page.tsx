@@ -24,6 +24,7 @@ const devSession =
           name: "Dev User",
           email: "dev@localhost",
           image: null,
+          role: "USER",
         },
         expires: new Date(Date.now() + 86400000).toISOString(),
       }

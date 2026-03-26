@@ -5,8 +5,12 @@ export const runtime = "edge";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") ?? undefined;
-  const description = searchParams.get("description") ?? undefined;
+  const rawTitle = searchParams.get("title") ?? undefined;
+  const rawDescription = searchParams.get("description") ?? undefined;
+
+  // Input validation: truncate to safe lengths
+  const title = rawTitle?.slice(0, 100);
+  const description = rawDescription?.slice(0, 200);
 
   return new ImageResponse(<DefaultOG title={title} description={description} />, {
     width: 1200,
