@@ -10,7 +10,7 @@ export function DashboardTopbar() {
         <div className="md:hidden">
           <DashboardSidebar />
         </div>
-        <span className="text-sm font-semibold md:hidden">{siteConfig.name}</span>
+        <span className="text-sm font-semibold">{siteConfig.name}</span>
       </div>
       <UserMenu />
     </header>

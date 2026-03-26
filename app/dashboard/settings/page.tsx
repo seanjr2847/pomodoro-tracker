@@ -12,8 +12,8 @@ import {
   AvatarFallback,
   AvatarImage,
   Separator,
-  Button,
 } from "@/shared/ui";
+import { DeleteAccountButton } from "./DeleteAccountButton";
 
 // Dev-only mock session for testing without OAuth
 const devSession =
@@ -78,9 +78,13 @@ export default async function SettingsPage() {
           <CardDescription>{t("dangerDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="destructive" size="sm">
-            {t("deleteAccount")}
-          </Button>
+          <DeleteAccountButton
+            triggerLabel={t("deleteAccount")}
+            title={t("deleteConfirmTitle")}
+            description={t("deleteConfirmDescription")}
+            cancelLabel={t("deleteConfirmCancel")}
+            actionLabel={t("deleteConfirmAction")}
+          />
         </CardContent>
       </Card>
     </div>

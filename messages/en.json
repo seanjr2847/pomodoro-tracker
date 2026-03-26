@@ -23,7 +23,11 @@
     "subscriptionDescription": "Manage your subscription plan.",
     "dangerZone": "Danger Zone",
     "dangerDescription": "Permanently delete your account and all associated data.",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete your account and all associated data.",
+    "deleteConfirmCancel": "Cancel",
+    "deleteConfirmAction": "Delete Account"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",

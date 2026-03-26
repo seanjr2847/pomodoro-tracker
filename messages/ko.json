@@ -23,7 +23,11 @@
     "subscriptionDescription": "구독 플랜을 관리하세요.",
     "dangerZone": "위험 영역",
     "dangerDescription": "계정과 모든 관련 데이터를 영구적으로 삭제합니다.",
-    "deleteAccount": "계정 삭제"
+    "deleteAccount": "계정 삭제",
+    "deleteConfirmTitle": "정말로 삭제하시겠습니까?",
+    "deleteConfirmDescription": "이 작업은 되돌릴 수 없습니다. 계정과 모든 관련 데이터가 영구적으로 삭제됩니다.",
+    "deleteConfirmCancel": "취소",
+    "deleteConfirmAction": "계정 삭제"
   },
   "errors": {
     "somethingWentWrong": "문제가 발생했습니다",

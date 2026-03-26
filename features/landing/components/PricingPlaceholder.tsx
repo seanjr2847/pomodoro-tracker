@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { Button, Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
+import { Button, Badge, Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
 
 export function PricingPlaceholder() {
   const { pricing } = siteConfig;
@@ -33,7 +33,10 @@ export function PricingPlaceholder() {
             </Button>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative border-neutral-900 dark:border-white">
+          <Badge className="absolute -top-3 right-4 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+            Popular
+          </Badge>
           <CardHeader>
             <CardTitle>{pricing.pro.name}</CardTitle>
             <p className="text-3xl font-bold">{pricing.pro.price}</p>
