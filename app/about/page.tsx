@@ -85,7 +85,7 @@ export default function AboutPage() {
                   <div className="flex flex-col items-center gap-3 text-center">
                     <Avatar className="h-16 w-16">
                       <AvatarImage src={member.image ?? undefined} alt={member.name} />
-                      <AvatarFallback className="bg-neutral-100 text-lg font-medium dark:bg-neutral-800">
+                      <AvatarFallback className="bg-gradient-to-br from-neutral-200 to-neutral-300 text-lg font-medium text-neutral-700 dark:from-neutral-700 dark:to-neutral-600 dark:text-neutral-200">
                         {initials}
                       </AvatarFallback>
                     </Avatar>

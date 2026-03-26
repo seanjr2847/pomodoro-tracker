@@ -27,7 +27,7 @@ export function Testimonial({ testimonial }: { testimonial: TestimonialData }) {
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarImage src={testimonial.avatar ?? undefined} alt={testimonial.name} />
-              <AvatarFallback className="bg-neutral-100 text-sm font-medium dark:bg-neutral-800">
+              <AvatarFallback className="bg-gradient-to-br from-neutral-200 to-neutral-300 text-sm font-medium text-neutral-700 dark:from-neutral-700 dark:to-neutral-600 dark:text-neutral-200">
                 {initials}
               </AvatarFallback>
             </Avatar>
