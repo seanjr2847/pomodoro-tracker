@@ -63,7 +63,7 @@ factory-boilerplate/
 │       ├── og/                  # OG 이미지 생성 (Edge Runtime)
 │       └── webhook/paddle/      # Paddle webhook
 │
-├── features/               # Feature 모듈 — 비즈니스 로직 (9 모듈, 50 파일)
+├── features/               # Feature 모듈 — 비즈니스 로직 (14 모듈)
 │   ├── landing/            # 랜딩페이지 + Dashboard UI
 │   ├── auth/               # 인증 (Google OAuth)
 │   ├── billing/            # 결제 (Paddle, 환경변수 토글)
@@ -72,13 +72,24 @@ factory-boilerplate/
 │   ├── seo/                # 메타데이터 생성
 │   ├── og/                 # OG 이미지 템플릿
 │   ├── legal/              # Privacy Policy, Terms of Service
-│   └── [각 모듈]/index.ts  # Barrel export (공개 API)
+│   ├── api-client/         # API 클라이언트 래퍼
+│   ├── api-keys/           # API 키 관리
+│   ├── changelog/          # 체인지로그 (MDX)
+│   ├── rate-limit/         # API 속도 제한
+│   ├── usage/              # 사용량 미터링
+│   ├── [각 모듈]/index.ts  # Barrel export (공개 API)
+│   └── [각 모듈]/__tests__/ # Unit 테스트 (Feature co-locate)
+│       └── __e2e__/        # E2E 테스트 (Feature co-locate)
 │
-├── shared/                 # 공용 UI, 유틸, 프로바이더 (22 파일)
+├── shared/                 # 공용 UI, 유틸, 프로바이더
 │   ├── ui/                 # shadcn/ui 컴포넌트 + barrel export
 │   ├── utils/cn.ts         # clsx + tailwind-merge
 │   ├── hooks/              # useMediaQuery, useDarkMode
-│   └── providers/          # ThemeProvider (next-themes)
+│   ├── providers/          # ThemeProvider (next-themes)
+│   └── __tests__/          # Core Unit 테스트 (cn, logger, theme, site-config)
+│
+├── tests/
+│   └── e2e/                # Core E2E 테스트 (landing, auth)
 │
 ├── config/
 │   └── site.ts             # SiteConfig — 중앙 설정 단일 소스 (~307줄)

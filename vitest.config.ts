@@ -5,7 +5,31 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
-    include: ["tests/**/*.test.ts"],
+    include: [
+      "shared/**/__tests__/**/*.test.ts",
+      "features/**/__tests__/**/*.test.ts",
+    ],
+    coverage: {
+      provider: "v8",
+      include: [
+        "features/**/lib/**",
+        "features/**/api/**",
+        "features/**/config/**",
+        "features/**/hooks/**",
+        "shared/utils/**",
+        "shared/lib/**",
+        "shared/hooks/**",
+        "lib/**",
+        "config/**",
+      ],
+      exclude: [
+        "**/*.d.ts",
+        "**/index.ts",
+        "**/hooks/**",
+        "features/auth/config/auth.ts",
+      ],
+      reporter: ["text", "text-summary"],
+    },
   },
   resolve: {
     alias: {

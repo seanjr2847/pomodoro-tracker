@@ -1,7 +1,12 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: ".",
+  testMatch: [
+    "tests/e2e/**/*.spec.ts",
+    "features/**/__e2e__/**/*.spec.ts",
+  ],
+  testIgnore: ["**/node_modules/**"],
   timeout: 30_000,
   retries: process.env.CI ? 1 : 0,
   use: {

@@ -1,105 +1,178 @@
 # Testing
 
-## 1. 현재 상태
+## 1. 테스트 인프라
 
-테스트 인프라가 **구축되지 않은 상태**:
-
-- 테스트 프레임워크 미설치 (vitest, jest, playwright 모두 `package.json`에 없음)
-- 테스트 파일 없음 (프로젝트 전체에 `*.test.*`, `*.spec.*` 파일 부재)
-- `tests/`, `__tests__/` 디렉토리 없음
+| 프레임워크 | 버전 | 용도 | 명령어 |
+|-----------|------|------|--------|
+| Vitest | ^4.1.1 | Unit 테스트 | `pnpm test` / `pnpm test:watch` |
+| @vitest/coverage-v8 | ^4.1.1 | 커버리지 | `pnpm test -- --coverage` |
+| Playwright | ^1.58.2 | E2E 테스트 | `pnpm test:e2e` |
 
 ---
 
-## 2. Placeholder 스크립트
+## 2. 테스트 파일 위치 규칙
 
-```json
-{
-  "test": "echo \"No tests configured yet — install vitest and add your tests\"",
-  "test:e2e": "echo \"No E2E tests configured yet — install playwright and add your tests\""
-}
+**핵심 원리**: Feature 폴더 삭제 → 테스트 자동 삭제 (glob 패턴이 자동 수집/제외)
+
+### Core 테스트 (항상 존재, 삭제 불가)
+
+```
+tests/e2e/                      # Core E2E — 사이트 전반 크로스커팅 테스트
+├── landing.spec.ts             # 랜딩페이지 + 네비게이션
+└── auth.spec.ts                # 인증 플로우 (mock session → 대시보드)
+
+shared/__tests__/               # Core Unit — 공유 인프라 테스트
+├── cn.test.ts                  # clsx + tailwind-merge 유틸
+├── logger.test.ts              # JSON 로거
+├── site-config.test.ts         # siteConfig 검증
+└── theme.test.ts               # 테마 색상 변환 유틸
 ```
 
-스크립트 이름(`test`, `test:e2e`)은 예약되어 있어 프레임워크 설치 시 즉시 교체 가능.
+### Feature 테스트 (Feature와 co-locate)
+
+```
+features/{feature-name}/
+├── components/
+├── hooks/
+├── __tests__/                  # Unit 테스트
+│   └── {name}.test.ts
+└── __e2e__/                    # E2E 테스트
+    └── {name}.spec.ts
+```
+
+### 현재 Feature 테스트 현황
+
+| Feature | Unit | E2E |
+|---------|------|-----|
+| auth | `dev-session.test.ts`, `sign-in-button.test.ts` | - |
+| billing | `verify-signature.test.ts`, `webhook-schema.test.ts` | `pricing.spec.ts` |
+| blog | `mdx.test.ts` | `blog.spec.ts` |
+| landing | `footer.test.ts`, `interleave.test.ts`, `pricing.test.ts` | - |
 
 ---
 
-## 3. 현재 검증 수단
+## 3. 설정 파일
 
-| 명령어 | 검증 내용 |
-|--------|----------|
-| `pnpm build` | TypeScript 타입 체크 + Next.js 프로덕션 빌드 |
-| `pnpm lint` | ESLint (next/core-web-vitals + next/typescript) |
+### Vitest (`vitest.config.ts`)
 
-코드 변경 후 최소한 `pnpm build && pnpm lint` 실행 필요.
+```ts
+include: [
+  "shared/**/__tests__/**/*.test.ts",       // Core Unit
+  "features/**/__tests__/**/*.test.ts",      // Feature Unit
+],
+```
+
+### Playwright (`playwright.config.ts`)
+
+```ts
+testDir: ".",
+testMatch: [
+  "tests/e2e/**/*.spec.ts",                 // Core E2E
+  "features/**/__e2e__/**/*.spec.ts",        // Feature E2E
+],
+testIgnore: ["**/node_modules/**"],
+```
 
 ---
 
-## 4. 권장 테스트 전략 (향후)
+## 4. 새 Feature 테스트 추가 가이드
 
-### Unit Tests — vitest
-
-순수 함수와 유틸리티를 대상으로 한 빠른 단위 테스트:
+### Unit 테스트
 
 ```bash
-# 설치
-pnpm add -D vitest @testing-library/react @testing-library/jest-dom jsdom
+# 1. __tests__ 디렉토리 생성
+mkdir -p features/my-feature/__tests__
+
+# 2. 테스트 파일 생성 (kebab-case, .test.ts)
+# features/my-feature/__tests__/my-logic.test.ts
 ```
 
-### Component Tests — vitest + React Testing Library
+```typescript
+import { describe, it, expect } from "vitest";
+import { myFunction } from "@/features/my-feature/lib/myLogic";
 
-Client Component의 상호작용과 렌더링 검증.
-
-### E2E Tests — Playwright
-
-사용자 흐름 전체를 브라우저에서 검증:
-
-```bash
-# 설치
-pnpm add -D @playwright/test
-npx playwright install
+describe("myFunction", () => {
+  it("does the expected thing", () => {
+    expect(myFunction("input")).toBe("output");
+  });
+});
 ```
 
-### Architecture Tests
-
-Import 경계 검증 (순환 의존 감지, Feature 간 barrel export 준수):
+### E2E 테스트
 
 ```bash
-# 도구 예시
-pnpm add -D dependency-cruiser
+# 1. __e2e__ 디렉토리 생성
+mkdir -p features/my-feature/__e2e__
+
+# 2. 테스트 파일 생성 (kebab-case, .spec.ts)
+# features/my-feature/__e2e__/my-feature.spec.ts
+```
+
+```typescript
+import { test, expect } from "@playwright/test";
+
+test.describe("My Feature", () => {
+  test("loads and renders correctly", async ({ page }) => {
+    await page.goto("/my-feature");
+    await expect(page.getByRole("heading")).toBeVisible();
+  });
+});
 ```
 
 ---
 
-## 5. 우선 테스트 대상
+## 5. 네이밍 규칙
 
-### P0: 보안/핵심 (즉시)
-
-| 대상 | 위치 | 유형 | 이유 |
-|------|------|------|------|
-| `verifyPaddleSignature()` | `features/billing/api/webhook.ts` | Unit | 결제 보안 핵심, HMAC-SHA256 서명 검증 |
-| `interleave()` | `features/landing/lib/renderSections.ts` | Unit | 랜딩페이지 렌더링 로직 핵심 |
-
-### P1: 데이터 레이어 (단기)
-
-| 대상 | 위치 | 유형 | 이유 |
-|------|------|------|------|
-| `getAllPosts()` | `features/blog/lib/posts.ts` | Unit | 블로그 데이터 파이프라인 |
-| `getPostsByTag()` | `features/blog/lib/posts.ts` | Unit | 태그 필터링 로직 |
-| `extractHeadings()` | `features/blog/lib/mdx.ts` | Unit | TOC 생성 로직 |
-| `generateSiteMetadata()` | `features/seo/metadata.ts` | Unit | SEO 메타데이터 정합성 |
-
-### P2: 통합 테스트 (중기)
-
-| 대상 | 유형 | 이유 |
+| 대상 | 규칙 | 예시 |
 |------|------|------|
-| Dashboard auth guard | Integration | 미인증 사용자 redirect 검증 |
-| Billing feature toggle | Integration | `PADDLE_API_KEY` 유무에 따른 UI 분기 |
-| Blog listing + filtering | Integration | 태그 필터, 정렬, published 필터링 |
+| 테스트 디렉토리 | `__tests__/` (unit), `__e2e__/` (E2E) | `features/blog/__tests__/` |
+| Unit 테스트 파일 | kebab-case + `.test.ts` | `verify-signature.test.ts` |
+| E2E 테스트 파일 | kebab-case + `.spec.ts` | `blog.spec.ts` |
+| Import 경로 | `@/` alias (상대 경로 아님) | `@/features/blog/lib/mdx` |
 
-### P3: E2E (장기)
+---
 
-| 시나리오 | 이유 |
+## 6. 검증 명령어
+
+```bash
+# Unit 테스트 실행
+pnpm test
+
+# Unit 테스트 (watch 모드)
+pnpm test:watch
+
+# E2E 테스트 실행 (dev 서버 자동 시작)
+pnpm test:e2e
+
+# 커버리지 포함
+pnpm test -- --coverage
+
+# 전체 검증 (커밋 전)
+pnpm lint && pnpm test && pnpm build
+```
+
+---
+
+## 7. 향후 테스트 확대 대상
+
+### Unit (Feature co-locate)
+
+| 대상 | Feature | 파일 |
+|------|---------|------|
+| `getAllPosts()`, `getPostsByTag()` | blog | `features/blog/__tests__/posts.test.ts` |
+| `generateApiKey()`, `hashKey()` | api-keys | `features/api-keys/__tests__/key-generation.test.ts` |
+| `rateLimit()`, `getIdentifier()` | rate-limit | `features/rate-limit/__tests__/rate-limiter.test.ts` |
+| `generateSiteMetadata()` | seo | `features/seo/__tests__/metadata.test.ts` |
+
+### E2E (Feature co-locate)
+
+| 시나리오 | Feature | 파일 |
+|----------|---------|------|
+| API Key 생성/삭제 플로우 | api-keys | `features/api-keys/__e2e__/key-management.spec.ts` |
+| Settings 페이지 조작 | landing | `features/landing/__e2e__/settings.spec.ts` |
+
+### Core E2E (tests/e2e/)
+
+| 시나리오 | 파일 |
 |----------|------|
-| Landing → Sign In → Dashboard → Settings → Sign Out | 핵심 사용자 흐름 |
-| Blog list → Blog detail → Navigation | 콘텐츠 탐색 흐름 |
-| Pricing page 렌더링 (billing 활성/비활성) | Feature toggle 검증 |
+| 라우팅 + 404 처리 | `tests/e2e/navigation.spec.ts` |

@@ -3,7 +3,11 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/shared/providers/ThemeProvider";
 import { PaddleProvider } from "@/features/billing";
+import { SonnerToaster } from "@/shared/ui";
 import { generateSiteMetadata } from "@/features/seo";
+import { AnalyticsProvider, GAScript } from "@/features/analytics";
+import { MonitoringProvider } from "@/features/monitoring";
+import { CookieBanner } from "@/features/cookie-consent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,10 +32,19 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <head>
+        <GAScript />
+      </head>
       <body className="antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <PaddleProvider>{children}</PaddleProvider>
+            <MonitoringProvider>
+              <AnalyticsProvider>
+                <PaddleProvider>{children}</PaddleProvider>
+              </AnalyticsProvider>
+            </MonitoringProvider>
+            <SonnerToaster richColors position="bottom-right" />
+            <CookieBanner />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

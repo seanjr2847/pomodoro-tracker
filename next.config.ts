@@ -16,11 +16,11 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.paddle.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.paddle.com https://www.googletagmanager.com https://us-assets.i.posthog.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://checkout.paddle.com https://sandbox-checkout.paddle.com",
+      "connect-src 'self' https://checkout.paddle.com https://sandbox-checkout.paddle.com https://us.i.posthog.com https://www.google-analytics.com https://*.sentry.io",
       "frame-src https://checkout.paddle.com https://sandbox-checkout.paddle.com",
     ].join("; "),
   },

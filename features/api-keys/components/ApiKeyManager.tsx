@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Copy, Plus, Trash2, Key } from "lucide-react";
+import { copyToClipboard } from "@/shared/utils/clipboard";
 import {
   Button,
   Card,
@@ -22,7 +23,6 @@ export function ApiKeyManager() {
   const queryClient = useQueryClient();
   const [name, setName] = useState("");
   const [newKey, setNewKey] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ["api-keys"],
@@ -45,11 +45,7 @@ export function ApiKeyManager() {
     },
   });
 
-  const copyKey = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const copyKey = (text: string) => copyToClipboard(text, "API key copied");
 
   return (
     <Card>
@@ -77,7 +73,7 @@ export function ApiKeyManager() {
                 onClick={() => copyKey(newKey)}
               >
                 <Copy className="mr-1 h-3 w-3" />
-                {copied ? "Copied!" : "Copy"}
+                Copy
               </Button>
             </div>
           </div>

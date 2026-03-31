@@ -238,3 +238,8 @@ export {
   useSidebar,
   sidebarMenuButtonVariants,
 } from "./sidebar";
+export { DataTable } from "./data-table";
+export { SortableHeader } from "./sortable-header";
+export { ViewToggle } from "./view-toggle";
+export { CardGrid } from "./card-grid";
+export { Wizard, WizardStep, WizardProgress, WizardNavigation, useWizard } from "./wizard";

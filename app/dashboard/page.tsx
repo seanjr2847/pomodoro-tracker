@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { UsageDashboard } from "@/features/usage";
 import { ApiKeyManager } from "@/features/api-keys";
+import { FeedbackForm } from "@/features/feedback";
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
@@ -16,6 +17,7 @@ export default function DashboardPage() {
         <UsageDashboard plan="free" />
         <ApiKeyManager />
       </div>
+      <FeedbackForm />
     </div>
   );
 }

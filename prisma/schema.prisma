@@ -24,6 +24,9 @@ model User {
   subscription  Subscription?
   apiKeys       ApiKey[]
   usageRecords  UsageRecord[]
+  generations   Generation[]
+  kanbanCards   KanbanCard[]
+  sharedLinks   SharedLink[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -117,4 +120,54 @@ model UsageRecord {
 
   @@index([userId, createdAt])
   @@map("usage_records")
+}
+
+model Generation {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  input     Json
+  output    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("generations")
+}
+
+model KanbanCard {
+  id        String   @id @default(cuid())
+  userId    String
+  boardId   String
+  column    String
+  title     String
+  content   String?
+  position  Int
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, boardId, column])
+  @@map("kanban_cards")
+}
+
+model SharedLink {
+  id           String    @id @default(cuid())
+  userId       String
+  resourceType String
+  resourceId   String
+  slug         String    @unique
+  isPublic     Boolean   @default(true)
+  password     String?
+  expiresAt    DateTime?
+  viewCount    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([userId, resourceType])
+  @@map("shared_links")
 }

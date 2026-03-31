@@ -9,10 +9,10 @@ import { SignInButton } from "@/features/auth";
 import { cn } from "@/shared/utils/cn";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
+  { label: "Features", href: "/#features" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
-  { label: "Changelog", href: "/changelog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
