@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Activity, Key, Zap, CreditCard, History, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
+<<<<<<< HEAD
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
 import { UsageDashboard, ApiKeyManager, FeedbackForm } from "./widgets";
 
@@ -49,6 +50,14 @@ const quickActions = [
     description: "Configure your account",
   },
 ];
+=======
+import { UsageDashboard } from "@/features/usage";
+import { ApiKeyManager } from "@/features/api-keys";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 97a9b91764f415196c300c2eaf880163656b1071
+>>>>>>> 59ae8c622d47cf77f719d73ca7f578c98600f5b2
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
@@ -85,6 +94,7 @@ export default function DashboardPage() {
         <UsageDashboard plan="free" />
         <ApiKeyManager />
       </div>
+<<<<<<< HEAD
 
       {/* Quick actions */}
       <div>
@@ -113,6 +123,8 @@ export default function DashboardPage() {
       </div>
 
       <FeedbackForm />
+=======
+>>>>>>> 59ae8c622d47cf77f719d73ca7f578c98600f5b2
     </div>
   );
 }
