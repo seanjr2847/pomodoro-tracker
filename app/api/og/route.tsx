@@ -1,5 +1,5 @@
 import { ImageResponse } from "@vercel/og";
-import { DefaultOG } from "@/features/og/templates/DefaultOG";
+import { DefaultOG } from "@/features/og";
 
 export const runtime = "edge";
 

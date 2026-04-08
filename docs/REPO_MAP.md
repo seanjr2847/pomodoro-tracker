@@ -164,6 +164,12 @@ factory-boilerplate/
 | `/api/auth/*` | `app/api/auth/[...nextauth]/route.ts` | API | - | Auth.js handler (GET, POST) |
 | `/api/og` | `app/api/og/route.tsx` | API | - | OG 이미지 생성 (Edge Runtime) |
 | `/api/webhook/paddle` | `app/api/webhook/paddle/route.ts` | API | - | Paddle webhook (POST, 서명 검증) |
+| `/dashboard/api-keys` | `app/dashboard/api-keys/page.tsx` | Page | 필수 | API 키 관리 페이지 |
+| `/changelog` | `app/changelog/page.tsx` | Page | - | 체인지로그 목록 |
+| `/s/[slug]` | `app/s/[slug]/page.tsx` | Page | - | 공유 링크 콘텐츠 표시 |
+| `/offline` | `app/offline/page.tsx` | Page | - | PWA 오프라인 폴백 |
+| `/manifest.webmanifest` | `app/manifest.ts` | MetadataRoute | - | PWA Web Manifest |
+| `/api/generate` | `app/api/generate/route.ts` | API | 필수 | AI 텍스트 생성 (POST, Gemini 스트리밍) |
 
 추가 파일: `app/layout.tsx` (Root Layout), `app/dashboard/layout.tsx` (Dashboard Layout), `app/sitemap.ts`, `app/robots.ts`, `app/loading.tsx`, `app/error.tsx`, `app/not-found.tsx`, `app/dashboard/loading.tsx`, `app/dashboard/error.tsx`, `app/dashboard/not-found.tsx`
 

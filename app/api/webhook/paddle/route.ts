@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import { verifyPaddleSignature } from "@/features/billing/api/webhook";
-import { isBillingEnabled } from "@/features/billing/config/paddle";
 import {
+  verifyPaddleSignature,
+  isBillingEnabled,
   upsertSubscription,
   findUserByEmail,
-} from "@/features/billing/lib/subscription";
-import {
   paddleWebhookEventSchema,
   ALLOWED_WEBHOOK_EVENTS,
-} from "@/features/billing/lib/webhookSchema";
+} from "@/features/billing";
 import { prisma } from "@/features/database";
 import { logger } from "@/shared/lib/logger";
 
@@ -76,7 +74,7 @@ export async function POST(request: Request) {
 
   if (!userId) {
     logger.warn("webhook:user-not-found", { subscriptionId: data.id });
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ error: "User not found" }, { status: 500 });
   }
 
   const status =

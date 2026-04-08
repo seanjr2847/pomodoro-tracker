@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
-import { streamText, isAIEnabled } from "@/features/ai-generation/lib/gemini";
+import { authenticateRequest } from "@/features/auth";
+import { streamText, isAIEnabled } from "@/features/ai-generation";
 
 export async function POST(request: Request) {
+  const authResult = await authenticateRequest(request);
+  if (!authResult) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!isAIEnabled) {
     return NextResponse.json(
       { error: "AI generation is not configured. Set GEMINI_API_KEY." },
@@ -9,7 +15,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const { prompt, model, systemPrompt } = await request.json();
+  let body: { prompt?: unknown; model?: unknown; systemPrompt?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const { prompt, model, systemPrompt } = body;
 
   if (!prompt || typeof prompt !== "string") {
     return NextResponse.json({ error: "prompt is required" }, { status: 400 });
@@ -19,7 +32,7 @@ export async function POST(request: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        for await (const chunk of streamText(prompt, { model, systemPrompt })) {
+        for await (const chunk of streamText(prompt, { model: model as string | undefined, systemPrompt: systemPrompt as string | undefined })) {
           controller.enqueue(encoder.encode(chunk));
         }
       } catch (e) {

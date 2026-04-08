@@ -3,10 +3,16 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/shared/utils/cn";
 
+const animationClasses = {
+  "slide-up-fade": "animate-slide-up-fade",
+  "fade-in": "animate-fade-in",
+  "scale-fade": "animate-scale-fade",
+} as const;
+
 interface AnimateOnScrollProps {
   children: ReactNode;
   className?: string;
-  animation?: "slide-up-fade" | "fade-in" | "scale-fade";
+  animation?: keyof typeof animationClasses;
   delay?: number;
   threshold?: number;
 }
@@ -40,7 +46,7 @@ export function AnimateOnScroll({
   return (
     <div
       ref={ref}
-      className={cn(visible ? `animate-${animation}` : "opacity-0", className)}
+      className={cn(visible ? animationClasses[animation] : "opacity-0", className)}
       style={
         visible && delay > 0
           ? { animationDelay: `${delay}ms`, animationFillMode: "both" }

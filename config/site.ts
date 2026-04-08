@@ -300,6 +300,11 @@ export const siteConfig: SiteConfig = {
     ],
   },
 
+  dashboardMenu: [
+    { label: "Kanban", href: "/dashboard/kanban", icon: "LayoutKanban" },
+    { label: "History", href: "/dashboard/history", icon: "History" },
+  ],
+
   social: {
     twitter: "https://twitter.com/acme",
     github: "https://github.com/acme",

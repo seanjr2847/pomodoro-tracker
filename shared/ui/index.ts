@@ -243,3 +243,7 @@ export { SortableHeader } from "./sortable-header";
 export { ViewToggle } from "./view-toggle";
 export { CardGrid } from "./card-grid";
 export { Wizard, WizardStep, WizardProgress, WizardNavigation, useWizard } from "./wizard";
+export { GridPattern } from "./grid-pattern";
+export { AnimateOnScroll } from "./animate-on-scroll";
+export { LucideIconByName } from "./lucide-icon";
+export { PageHeader, type PageHeaderProps, type PageHeaderBreadcrumbItem } from "./page-header";

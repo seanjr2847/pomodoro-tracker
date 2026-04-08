@@ -19,15 +19,18 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
 }
 
 export function UsageDashboard({ plan = "free" }: { plan?: PlanType }) {
-  const { data: usage } = useQuery({
+  const { data: usageResult } = useQuery({
     queryKey: ["usage-monthly"],
     queryFn: () => getMonthlyUsageAction(),
   });
 
-  const { data: limits } = useQuery({
+  const { data: limitsResult } = useQuery({
     queryKey: ["usage-limits", plan],
     queryFn: () => checkUsageLimitAction(plan),
   });
+
+  const usage = usageResult && "success" in usageResult && usageResult.success ? usageResult.data : undefined;
+  const limits = limitsResult && "success" in limitsResult && limitsResult.success ? limitsResult.data : undefined;
 
   const stats = [
     {

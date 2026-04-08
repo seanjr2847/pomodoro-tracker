@@ -19,17 +19,21 @@ export function useShare({ resourceType, resourceId }: UseShareOptions) {
   const qc = useQueryClient();
   const queryKey = ["share", resourceType, resourceId];
 
-  const { data: shareLink, isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey,
     queryFn: () => getShareLinkAction(resourceType, resourceId),
   });
 
+  const shareLink = result && "success" in result && result.success ? result.data : null;
+
   const createMut = useMutation({
     mutationFn: createShareLinkAction,
-    onSuccess: (data) => {
+    onSuccess: (result) => {
       qc.invalidateQueries({ queryKey });
-      const url = `${window.location.origin}${data.url}`;
-      copyToClipboard(url, "Share link copied!");
+      if (result && "success" in result && result.success) {
+        const url = `${window.location.origin}${result.data.url}`;
+        copyToClipboard(url, "Share link copied!");
+      }
     },
   });
 

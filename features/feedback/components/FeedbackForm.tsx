@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/shared/ui";
 import { feedbackSchema, type FeedbackFormValues } from "../lib/schema";
+import { submitFeedbackAction } from "../actions/feedbackActions";
 
 export function FeedbackForm() {
   const form = useForm<FeedbackFormValues>({
@@ -38,11 +39,14 @@ export function FeedbackForm() {
     },
   });
 
-  function onSubmit(data: FeedbackFormValues) {
-    // Replace with a server action or API call
-    console.log("Feedback submitted:", data);
-    toast.success("Thank you for your feedback!");
-    form.reset();
+  async function onSubmit(data: FeedbackFormValues) {
+    const result = await submitFeedbackAction(data);
+    if (result.success) {
+      toast.success("Thank you for your feedback!");
+      form.reset();
+    } else {
+      toast.error("Failed to submit feedback. Please try again.");
+    }
   }
 
   return (

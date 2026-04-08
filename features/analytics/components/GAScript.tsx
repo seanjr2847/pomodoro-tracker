@@ -14,6 +14,21 @@ export function GAScript() {
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+
+          // Default: deny analytics until user consents
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+          });
+
+          // Check existing consent
+          var consent = localStorage.getItem('cookie-consent');
+          if (consent === 'accepted') {
+            gtag('consent', 'update', {
+              analytics_storage: 'granted',
+            });
+          }
+
           gtag('js', new Date());
           gtag('config', '${analyticsConfig.gaId}');
         `}

@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: factory
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d factory"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps
+    command: sh -c "pnpm db:generate && pnpm dev"
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://dev:devpassword@postgres:5432/factory?sslmode=disable"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "dev-secret-change-in-production"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

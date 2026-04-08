@@ -4,14 +4,15 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import { siteConfig } from "@/config/site";
 import { Navbar, Footer } from "@/features/landing";
+import { JsonLd, articleJsonLd } from "@/features/seo";
 import {
   BlogPost,
   getPostBySlug,
   extractHeadings,
   getAllPosts,
   getAdjacentPosts,
+  mdxComponents,
 } from "@/features/blog";
-import { mdxComponents } from "@/features/blog/components/MDXComponents";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -58,26 +59,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ? post.frontmatter.image
     : `${siteConfig.url}/api/og?title=${encodeURIComponent(post.frontmatter.title)}`;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.frontmatter.title,
-    description: post.frontmatter.description,
-    datePublished: post.frontmatter.date,
-    image: ogImage,
-    url: `${siteConfig.url}/blog/${slug}`,
-    author: {
-      "@type": "Organization",
-      name: siteConfig.creator,
-      url: siteConfig.url,
-    },
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={articleJsonLd({
+          title: post.frontmatter.title,
+          description: post.frontmatter.description,
+          url: `${siteConfig.url}/blog/${slug}`,
+          datePublished: post.frontmatter.date,
+          image: ogImage,
+        })}
       />
       <Navbar />
       <BlogPost post={post} headings={headings} prev={prev} next={next}>

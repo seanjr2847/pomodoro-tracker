@@ -8,6 +8,7 @@ export default defineConfig({
     include: [
       "shared/**/__tests__/**/*.test.ts",
       "features/**/__tests__/**/*.test.ts",
+      "config/**/__tests__/**/*.test.ts",
     ],
     coverage: {
       provider: "v8",
@@ -29,6 +30,9 @@ export default defineConfig({
         "features/auth/config/auth.ts",
       ],
       reporter: ["text", "text-summary"],
+      thresholds: {
+        lines: 70,
+      },
     },
   },
   resolve: {

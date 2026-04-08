@@ -5,5 +5,5 @@ export { StreamingText } from "./blocks/StreamingText";
 export { ResultCard } from "./blocks/ResultCard";
 export { GenerationSkeleton } from "./blocks/GenerationSkeleton";
 export { CreditBadge } from "./blocks/CreditBadge";
-export { isAIEnabled } from "./lib/gemini";
+export { isAIEnabled, streamText } from "./lib/gemini";
 export type { GenerationStatus, GenerationResult } from "./types";

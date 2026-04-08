@@ -17,10 +17,12 @@ export function useHistory({ pageSize = 20 }: UseHistoryOptions = {}) {
   const qc = useQueryClient();
   const [query, setQuery] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey: ["generations", query],
     queryFn: () => listGenerationsAction({ query, pageSize }),
   });
+
+  const data = result && "success" in result && result.success ? result.data : undefined;
 
   const items: HistoryItem[] = (data?.items ?? []).map((i) => ({
     ...i,
@@ -62,6 +64,6 @@ export function useHistory({ pageSize = 20 }: UseHistoryOptions = {}) {
     save,
     remove,
     search,
-    hasMore: data?.nextCursor !== null,
+    hasMore: data?.nextCursor != null,
   };
 }

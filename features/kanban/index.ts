@@ -1,3 +1,4 @@
+// Not yet wired to any page
 export { useKanban } from "./hooks/useKanban";
 export { KanbanBoard } from "./blocks/KanbanBoard";
 export { KanbanColumn } from "./blocks/KanbanColumn";

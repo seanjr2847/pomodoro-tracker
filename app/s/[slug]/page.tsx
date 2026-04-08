@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
-import { PublicBanner } from "@/features/share";
-import { resolveShareSlugAction } from "@/features/share/actions/share";
+import { PublicBanner, resolveShareSlugAction } from "@/features/share";
 
 export default async function SharedPage({
   params,
@@ -11,9 +10,12 @@ export default async function SharedPage({
   const { slug } = await params;
   const result = await resolveShareSlugAction(slug);
 
-  if (!result) notFound();
+  if (!result || !("success" in result) || !result.success) notFound();
 
-  if (result.expired) {
+  const data = result.data;
+  if (!data) notFound();
+
+  if ("expired" in data && data.expired) {
     return (
       <main className="mx-auto flex min-h-screen max-w-lg items-center justify-center px-4">
         <Card>
@@ -33,9 +35,11 @@ export default async function SharedPage({
       <Card>
         <CardHeader>
           <CardTitle>Shared Content</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            {result.resourceType} &middot; {result.resourceId}
-          </p>
+          {"resourceType" in data && (
+            <p className="text-sm text-muted-foreground">
+              {data.resourceType} &middot; {data.resourceId}
+            </p>
+          )}
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">

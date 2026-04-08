@@ -18,19 +18,26 @@ import {
 import { contactSchema, type ContactFormValues } from "../lib/schema";
 import { submitContactAction } from "../lib/actions";
 
-export function ContactForm() {
+interface ContactFormProps {
+  /** app 레이어에서 email 연동 action을 주입. 없으면 기본 action 사용. */
+  action?: (data: ContactFormValues) => Promise<{ success: boolean; error?: string; data?: unknown }>;
+}
+
+export function ContactForm({ action }: ContactFormProps) {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", subject: "", message: "" },
   });
 
+  const submitAction = action ?? submitContactAction;
+
   async function onSubmit(data: ContactFormValues) {
-    const result = await submitContactAction(data);
+    const result = await submitAction(data);
     if (result.success) {
       toast.success("Message sent! We'll get back to you soon.");
       form.reset();
     } else {
-      toast.error(result.error);
+      toast.error(result.error ?? "Failed to send message");
     }
   }
 

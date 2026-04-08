@@ -1,27 +1,26 @@
 "use server";
 
-import { siteConfig } from "@/config/site";
-import { sendEmail, ContactEmail } from "@/features/email";
 import { contactSchema, type ContactFormValues } from "./schema";
+import { ok, fail, type ActionResult } from "@/shared/lib/actionResult";
 
-export async function submitContactAction(data: ContactFormValues) {
+/**
+ * contact Feature's default server action.
+ * Works without email Feature (console log).
+ * Override in app/contact/actions.ts if email integration is needed.
+ */
+export async function submitContactAction(
+  data: ContactFormValues
+): Promise<ActionResult<void>> {
   const parsed = contactSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, error: "Invalid form data" } as const;
+    return fail("Invalid form data");
   }
 
-  const { name, email, subject, message } = parsed.data;
-
-  const result = await sendEmail({
-    to: siteConfig.email,
-    subject: `[Contact] ${subject}`,
-    react: ContactEmail({ name, email, subject, message }),
-    replyTo: email,
+  console.log("[contact] Message received:", {
+    name: parsed.data.name,
+    email: parsed.data.email,
+    subject: parsed.data.subject,
   });
 
-  if (!result.success) {
-    return { success: false, error: "Failed to send message" } as const;
-  }
-
-  return { success: true } as const;
+  return ok(undefined);
 }

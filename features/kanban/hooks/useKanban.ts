@@ -20,10 +20,12 @@ export function useKanban({ boardId, columnDefs }: UseKanbanOptions) {
   const qc = useQueryClient();
   const queryKey = ["kanban", boardId];
 
-  const { data: rawCards = [], isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey,
     queryFn: () => listCardsAction(boardId),
   });
+
+  const rawCards = result && "success" in result && result.success ? result.data : [];
 
   const columns: KanbanColumnData[] = columnDefs.map((def) => ({
     def,

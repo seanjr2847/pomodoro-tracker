@@ -9,6 +9,13 @@ export function generateSiteMetadata(): Metadata {
     },
     description: siteConfig.description,
     metadataBase: new URL(siteConfig.url),
+    alternates: {
+      canonical: "/",
+      languages: {
+        "x-default": siteConfig.url,
+        en: siteConfig.url,
+      },
+    },
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -37,6 +44,9 @@ export function generateSiteMetadata(): Metadata {
     robots: {
       index: true,
       follow: true,
+    },
+    other: {
+      "theme-color": siteConfig.theme.primary,
     },
   };
 }

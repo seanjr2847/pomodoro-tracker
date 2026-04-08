@@ -51,6 +51,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
+  @@index([userId])
   @@map("accounts")
 }
 
@@ -62,6 +63,7 @@ model Session {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  @@index([userId])
   @@map("sessions")
 }
 
@@ -103,7 +105,7 @@ model ApiKey {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([key])
+  @@index([userId])
   @@map("api_keys")
 }
 
@@ -167,7 +169,6 @@ model SharedLink {
   createdAt    DateTime  @default(now())
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([slug])
   @@index([userId, resourceType])
   @@map("shared_links")
 }

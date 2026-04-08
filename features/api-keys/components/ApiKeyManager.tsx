@@ -24,17 +24,21 @@ export function ApiKeyManager() {
   const [name, setName] = useState("");
   const [newKey, setNewKey] = useState<string | null>(null);
 
-  const { data: keys = [], isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey: ["api-keys"],
     queryFn: () => listApiKeysAction(),
   });
 
+  const keys = result && "success" in result && result.success ? result.data : [];
+
   const createMutation = useMutation({
     mutationFn: (name: string) => createApiKeyAction(name),
-    onSuccess: (data) => {
-      setNewKey(data.rawKey);
-      setName("");
-      queryClient.invalidateQueries({ queryKey: ["api-keys"] });
+    onSuccess: (result) => {
+      if (result && "success" in result && result.success) {
+        setNewKey(result.data.rawKey);
+        setName("");
+        queryClient.invalidateQueries({ queryKey: ["api-keys"] });
+      }
     },
   });
 

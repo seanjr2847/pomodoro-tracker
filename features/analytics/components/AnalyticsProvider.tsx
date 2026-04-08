@@ -8,6 +8,7 @@ import {
   isPostHogEnabled,
   isGAEnabled,
 } from "../lib/config";
+import { captureUtmFromUrl } from "../lib/utm";
 
 let posthogInitialized = false;
 
@@ -31,6 +32,7 @@ export function AnalyticsProvider({
 
   useEffect(() => {
     initPostHog();
+    captureUtmFromUrl();
   }, []);
 
   useEffect(() => {

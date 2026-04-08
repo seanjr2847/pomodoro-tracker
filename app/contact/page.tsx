@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui";
 import { ContactForm } from "@/features/contact";
 import { Navbar, Footer } from "@/features/landing";
+import { submitContactWithEmail } from "./actions";
 
 export const metadata = {
   title: `Contact — ${siteConfig.name}`,
@@ -25,7 +26,7 @@ export default function ContactPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ContactForm />
+            <ContactForm action={submitContactWithEmail} />
           </CardContent>
         </Card>
       </main>

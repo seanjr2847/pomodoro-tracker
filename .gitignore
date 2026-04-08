@@ -32,6 +32,12 @@ yarn-error.log*
 .env
 .env*.local
 
+# pwa (build artifact)
+/public/sw.js
+/public/sw.js.map
+/public/serwist-worker-*.js
+/public/serwist-worker-*.js.map
+
 # vercel
 .vercel
 
@@ -40,5 +46,3 @@ yarn-error.log*
 next-env.d.ts
 /.playwright-mcp
 /.serena
-/.github
-/.claude

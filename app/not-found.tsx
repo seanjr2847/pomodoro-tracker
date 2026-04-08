@@ -1,13 +1,18 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Button } from "@/shared/ui";
 
 export default function NotFound() {
+  const t = useTranslations("errors");
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <h2 className="text-4xl font-bold">404</h2>
-      <p className="text-muted-foreground">This page could not be found.</p>
+      <p className="text-muted-foreground">{t("pageNotFoundDescription")}</p>
       <Button asChild>
-        <Link href="/">Go home</Link>
+        <Link href="/">{t("goHome")}</Link>
       </Button>
     </div>
   );

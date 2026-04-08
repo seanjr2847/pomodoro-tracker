@@ -18,8 +18,9 @@ export function useSubscription() {
 
   useEffect(() => {
     fetchSubscription()
-      .then((data) => {
-        if (data) {
+      .then((result) => {
+        if (result && "success" in result && result.success && result.data) {
+          const data = result.data;
           setSubscription({
             plan: data.plan,
             status: data.status as Subscription["status"],

@@ -1,16 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockSendEmail } = vi.hoisted(() => ({ mockSendEmail: vi.fn() }));
-
-vi.mock("@/config/site", () => ({
-  siteConfig: { email: "team@example.com" },
-}));
-
-vi.mock("@/features/email", () => ({
-  sendEmail: mockSendEmail,
-  ContactEmail: vi.fn(() => "react-element"),
-}));
-
 import { submitContactAction } from "../lib/actions";
 
 beforeEach(() => {
@@ -25,28 +14,23 @@ const validData = {
 };
 
 describe("submitContactAction", () => {
-  it("sends email and returns success", async () => {
-    mockSendEmail.mockResolvedValue({ success: true, id: "msg-1" });
+  it("returns success for valid data", async () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const result = await submitContactAction(validData);
-    expect(result).toEqual({ success: true });
-    expect(mockSendEmail).toHaveBeenCalledWith(
+    expect(result).toEqual({ success: true, data: undefined });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[contact] Message received:",
       expect.objectContaining({
-        to: "team@example.com",
-        subject: "[Contact] Hello there",
-        replyTo: "john@example.com",
+        name: "John Doe",
+        email: "john@example.com",
+        subject: "Hello there",
       }),
     );
+    consoleSpy.mockRestore();
   });
 
   it("returns error on invalid data", async () => {
     const result = await submitContactAction({ ...validData, email: "bad" });
     expect(result).toEqual({ success: false, error: "Invalid form data" });
-    expect(mockSendEmail).not.toHaveBeenCalled();
-  });
-
-  it("returns error when email send fails", async () => {
-    mockSendEmail.mockResolvedValue({ success: false, error: "smtp error" });
-    const result = await submitContactAction(validData);
-    expect(result).toEqual({ success: false, error: "Failed to send message" });
   });
 });

@@ -18,6 +18,10 @@ export function CookieBanner() {
   function handleAccept() {
     setConsent("accepted");
     setVisible(false);
+    // Update GA4 consent mode
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", { analytics_storage: "granted" });
+    }
   }
 
   function handleDecline() {

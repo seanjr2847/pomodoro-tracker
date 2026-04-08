@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useId, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
@@ -17,6 +17,33 @@ const tabIcons: Record<string, React.ReactNode> = {
 export function FeatureTabs() {
   const { featureTabs } = siteConfig;
   const [activeTab, setActiveTab] = useState(featureTabs[0]?.tab ?? "");
+  const uid = useId();
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent, currentIndex: number) => {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        const next = (currentIndex + 1) % featureTabs.length;
+        setActiveTab(featureTabs[next].tab);
+        document.getElementById(`${uid}-tab-${next}`)?.focus();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        const prev = (currentIndex - 1 + featureTabs.length) % featureTabs.length;
+        setActiveTab(featureTabs[prev].tab);
+        document.getElementById(`${uid}-tab-${prev}`)?.focus();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        setActiveTab(featureTabs[0].tab);
+        document.getElementById(`${uid}-tab-0`)?.focus();
+      } else if (e.key === "End") {
+        e.preventDefault();
+        const last = featureTabs.length - 1;
+        setActiveTab(featureTabs[last].tab);
+        document.getElementById(`${uid}-tab-${last}`)?.focus();
+      }
+    },
+    [featureTabs, uid],
+  );
 
   if (featureTabs.length === 0) return null;
 
@@ -44,11 +71,21 @@ export function FeatureTabs() {
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
       <div className="w-full">
         {/* Tab triggers */}
-        <div className="mx-auto flex w-fit rounded-lg bg-muted p-1">
-          {featureTabs.map((tab) => (
+        <div
+          role="tablist"
+          aria-label="Features"
+          className="mx-auto flex w-fit rounded-lg bg-muted p-1"
+        >
+          {featureTabs.map((tab, index) => (
             <button
               key={tab.tab}
+              id={`${uid}-tab-${index}`}
+              role="tab"
+              aria-selected={activeTab === tab.tab}
+              aria-controls={`${uid}-panel-${index}`}
+              tabIndex={activeTab === tab.tab ? 0 : -1}
               onClick={() => setActiveTab(tab.tab)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
               className={cn(
                 "relative rounded-md px-4 py-1.5 text-sm font-medium transition-colors",
                 activeTab === tab.tab
@@ -73,6 +110,9 @@ export function FeatureTabs() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
+              role="tabpanel"
+              id={`${uid}-panel-${activeIndex}`}
+              aria-labelledby={`${uid}-tab-${activeIndex}`}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}

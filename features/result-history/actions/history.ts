@@ -1,7 +1,24 @@
 "use server";
 
+import { z } from "zod/v4";
 import { prisma } from "@/features/database";
 import { auth } from "@/features/auth";
+import { ok, fail, okVoid } from "@/shared/lib/actionResult";
+
+const saveGenerationSchema = z.object({
+  title: z.string().min(1).max(500),
+  input: z.unknown(),
+  output: z.string().min(1),
+  metadata: z.unknown().optional(),
+});
+
+const listGenerationsSchema = z.object({
+  query: z.string().max(200).optional(),
+  cursor: z.string().min(1).optional(),
+  pageSize: z.number().int().min(1).max(100).optional(),
+}).optional();
+
+const idSchema = z.string().min(1);
 
 export async function saveGenerationAction(data: {
   title: string;
@@ -9,18 +26,25 @@ export async function saveGenerationAction(data: {
   output: string;
   metadata?: unknown;
 }) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+  const parsed = saveGenerationSchema.safeParse(data);
+  if (!parsed.success) {
+    return fail(`Validation failed: ${z.prettifyError(parsed.error)}`);
+  }
 
-  return prisma.generation.create({
+  const session = await auth();
+  if (!session?.user?.id) return fail("Unauthorized");
+
+  const generation = await prisma.generation.create({
     data: {
       userId: session.user.id,
-      title: data.title,
-      input: data.input as object,
-      output: data.output,
-      metadata: data.metadata as object | undefined,
+      title: parsed.data.title,
+      input: parsed.data.input as object,
+      output: parsed.data.output,
+      metadata: parsed.data.metadata as object | undefined,
     },
   });
+
+  return ok(generation);
 }
 
 export async function listGenerationsAction(opts?: {
@@ -28,36 +52,48 @@ export async function listGenerationsAction(opts?: {
   cursor?: string;
   pageSize?: number;
 }) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+  const parsed = listGenerationsSchema.safeParse(opts);
+  if (!parsed.success) {
+    return fail(`Validation failed: ${z.prettifyError(parsed.error)}`);
+  }
 
-  const pageSize = opts?.pageSize ?? 20;
+  const session = await auth();
+  if (!session?.user?.id) return fail("Unauthorized");
+
+  const pageSize = parsed.data?.pageSize ?? 20;
 
   const items = await prisma.generation.findMany({
     where: {
       userId: session.user.id,
-      ...(opts?.query ? { title: { contains: opts.query, mode: "insensitive" } } : {}),
+      ...(parsed.data?.query ? { title: { contains: parsed.data.query, mode: "insensitive" } } : {}),
     },
     orderBy: { createdAt: "desc" },
     take: pageSize + 1,
-    ...(opts?.cursor ? { cursor: { id: opts.cursor }, skip: 1 } : {}),
+    ...(parsed.data?.cursor ? { cursor: { id: parsed.data.cursor }, skip: 1 } : {}),
     select: { id: true, title: true, input: true, output: true, metadata: true, createdAt: true },
   });
 
   const hasMore = items.length > pageSize;
   if (hasMore) items.pop();
 
-  return {
+  return ok({
     items,
     nextCursor: hasMore ? items[items.length - 1]?.id ?? null : null,
-  };
+  });
 }
 
 export async function deleteGenerationAction(id: string) {
+  const parsed = idSchema.safeParse(id);
+  if (!parsed.success) {
+    return fail(`Validation failed: ${z.prettifyError(parsed.error)}`);
+  }
+
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+  if (!session?.user?.id) return fail("Unauthorized");
 
   await prisma.generation.delete({
-    where: { id, userId: session.user.id },
+    where: { id: parsed.data, userId: session.user.id },
   });
+
+  return okVoid();
 }
