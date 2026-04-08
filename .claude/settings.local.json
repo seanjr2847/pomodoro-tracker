@@ -42,7 +42,9 @@
       "Bash(grep -r \"TODO\\\\|FIXME\\\\|DEBUG\\\\|dummy\\\\|test\\\\|mock\" /e/Projects/factory-boilerplate/features /e/Projects/factory-boilerplate/app --include=*.ts --include=*.tsx)",
       "Bash(grep -r \"password\\\\|secret\\\\|api[_-]key\\\\|token\" /e/Projects/factory-boilerplate/app /e/Projects/factory-boilerplate/features --include=*.ts --include=*.tsx)",
       "Bash(grep -v \"^\\\\.$\\\\|^\\\\.\\\\.$\")",
-      "Bash(grep -r \"require\\\\|import.*http\\\\|import.*child_process\" /e/Projects/factory-boilerplate/app /e/Projects/factory-boilerplate/features --include=*.ts --include=*.tsx)"
+      "Bash(grep -r \"require\\\\|import.*http\\\\|import.*child_process\" /e/Projects/factory-boilerplate/app /e/Projects/factory-boilerplate/features --include=*.ts --include=*.tsx)",
+      "Bash(git worktree:*)",
+      "Bash(git branch:*)"
     ]
   }
 }

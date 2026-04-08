@@ -19,6 +19,7 @@ import {
   Button,
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
   Tooltip,
   TooltipContent,
@@ -239,6 +240,7 @@ function SidebarContent({
         {onToggle && (
           <button
             onClick={onToggle}
+            aria-label={collapsed ? "사이드바 펼치기" : "사이드바 접기"}
             className="shrink-0 rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             {collapsed ? (
@@ -282,12 +284,17 @@ function SidebarContent({
   );
 }
 
+/** Desktop sidebar only — rendered in DashboardLayout left column. */
 export function DashboardSidebar() {
+  // Use undefined as the "not yet mounted" sentinel to avoid hydration flash.
+  // SSR renders expanded; after mount we read localStorage and sync.
   const [collapsed, setCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === "true") setCollapsed(true);
+    setMounted(true);
   }, []);
 
   const toggle = () => {
@@ -296,29 +303,34 @@ export function DashboardSidebar() {
     localStorage.setItem(STORAGE_KEY, String(next));
   };
 
-  return (
-    <>
-      {/* Desktop */}
-      <aside
-        className={cn(
-          "hidden h-screen shrink-0 border-r transition-[width] duration-200 md:block",
-          collapsed ? "w-16" : "w-60"
-        )}
-      >
-        <SidebarContent collapsed={collapsed} onToggle={toggle} />
-      </aside>
+  // Before mount: always render expanded to match SSR output (no flash)
+  const isCollapsed = mounted ? collapsed : false;
 
-      {/* Mobile */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-60 p-0">
-          <SidebarContent collapsed={false} />
-        </SheetContent>
-      </Sheet>
-    </>
+  return (
+    <aside
+      className={cn(
+        "hidden h-dvh shrink-0 border-r transition-[width] duration-200 md:block",
+        isCollapsed ? "w-16" : "w-60"
+      )}
+    >
+      <SidebarContent collapsed={isCollapsed} onToggle={toggle} />
+    </aside>
+  );
+}
+
+/** Mobile sidebar — Sheet trigger rendered inside DashboardTopbar. */
+export function MobileSidebar() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" aria-label="메뉴 열기">
+          <Menu className="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-60 p-0">
+        <SheetTitle className="sr-only">내비게이션 메뉴</SheetTitle>
+        <SidebarContent collapsed={false} />
+      </SheetContent>
+    </Sheet>
   );
 }

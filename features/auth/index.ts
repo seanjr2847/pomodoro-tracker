@@ -5,3 +5,4 @@ export { UserMenu } from "./components/UserMenu";
 export { authenticateRequest } from "./lib/authenticateRequest";
 export type { AuthResult } from "./lib/authenticateRequest";
 export { useSession } from "./hooks/useSession";
+export { devSession } from "./lib/devSession";

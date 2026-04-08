@@ -1,33 +1,15 @@
-"use client";
-
 import Link from "next/link";
+import { Suspense } from "react";
 import { Activity, Key, Zap, CreditCard, History, Settings } from "lucide-react";
-import { useTranslations } from "next-intl";
-<<<<<<< HEAD
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
+import { getTranslations } from "next-intl/server";
+import { Card, CardContent, CardHeader, CardTitle, Skeleton } from "@/shared/ui";
 import { UsageDashboard, ApiKeyManager, FeedbackForm } from "./widgets";
 
 const statsCards = [
-  {
-    label: "Requests This Month",
-    value: "—",
-    icon: Activity,
-  },
-  {
-    label: "API Keys Active",
-    value: "—",
-    icon: Key,
-  },
-  {
-    label: "Tokens Used",
-    value: "—",
-    icon: Zap,
-  },
-  {
-    label: "Current Plan",
-    value: "Free",
-    icon: CreditCard,
-  },
+  { label: "Requests This Month", value: null, icon: Activity },
+  { label: "API Keys Active", value: null, icon: Key },
+  { label: "Tokens Used", value: null, icon: Zap },
+  { label: "Current Plan", value: "Free", icon: CreditCard },
 ];
 
 const quickActions = [
@@ -50,17 +32,9 @@ const quickActions = [
     description: "Configure your account",
   },
 ];
-=======
-import { UsageDashboard } from "@/features/usage";
-import { ApiKeyManager } from "@/features/api-keys";
-<<<<<<< HEAD
-=======
 
->>>>>>> 97a9b91764f415196c300c2eaf880163656b1071
->>>>>>> 59ae8c622d47cf77f719d73ca7f578c98600f5b2
-
-export default function DashboardPage() {
-  const t = useTranslations("dashboard");
+export default async function DashboardPage() {
+  const t = await getTranslations("dashboard");
 
   return (
     <div className="space-y-8">
@@ -83,7 +57,11 @@ export default function DashboardPage() {
               <card.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
+              {card.value !== null ? (
+                <div className="text-2xl font-bold">{card.value}</div>
+              ) : (
+                <Skeleton className="h-8 w-20" />
+              )}
             </CardContent>
           </Card>
         ))}
@@ -91,10 +69,13 @@ export default function DashboardPage() {
 
       {/* Main grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <UsageDashboard plan="free" />
-        <ApiKeyManager />
+        <Suspense fallback={<Skeleton className="h-48 w-full rounded-lg" />}>
+          <UsageDashboard plan="free" />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="h-48 w-full rounded-lg" />}>
+          <ApiKeyManager />
+        </Suspense>
       </div>
-<<<<<<< HEAD
 
       {/* Quick actions */}
       <div>
@@ -123,8 +104,6 @@ export default function DashboardPage() {
       </div>
 
       <FeedbackForm />
-=======
->>>>>>> 59ae8c622d47cf77f719d73ca7f578c98600f5b2
     </div>
   );
 }

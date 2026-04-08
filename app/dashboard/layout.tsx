@@ -1,23 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/features/auth";
+import { devSession } from "@/features/auth";
 import { DashboardSidebar, DashboardTopbar } from "@/features/landing";
 import { SessionProvider } from "next-auth/react";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
-
-// Dev-only mock session for testing without OAuth
-const devSession =
-  process.env.NODE_ENV === "development" && !process.env.GOOGLE_CLIENT_ID
-    ? {
-        user: {
-          id: "dev-user",
-          name: "Dev User",
-          email: "dev@localhost",
-          image: null,
-          role: "USER",
-        },
-        expires: new Date(Date.now() + 86400000).toISOString(),
-      }
-    : null;
 
 export default async function DashboardLayout({
   children,
@@ -30,11 +16,13 @@ export default async function DashboardLayout({
   return (
     <SessionProvider session={session}>
       <QueryProvider>
-        <div className="flex h-screen bg-background">
+        <div className="flex h-dvh bg-background">
           <DashboardSidebar />
           <div className="flex flex-1 flex-col overflow-hidden">
             <DashboardTopbar />
-            <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+            <main id="main-content" className="flex-1 overflow-y-auto p-4 sm:p-6">
+              {children}
+            </main>
           </div>
         </div>
       </QueryProvider>
