@@ -1,7 +1,7 @@
 import { auth } from "@/features/auth";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { BillingStatus, isBillingEnabled, getSubscriptionByUserId } from "@/features/billing";
+
 import {
   Card,
   CardContent,
@@ -67,10 +67,6 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
-      {isBillingEnabled && (
-        <SubscriptionSection userId={session.user.id!} t={t} />
-      )}
-
       <Separator />
 
       <Card className="border-destructive/50">
@@ -92,28 +88,3 @@ export default async function SettingsPage() {
   );
 }
 
-async function SubscriptionSection({
-  userId,
-  t,
-}: {
-  userId: string;
-  t: Awaited<ReturnType<typeof getTranslations<"settings">>>;
-}) {
-  const subscription = await getSubscriptionByUserId(userId);
-  const plan = subscription?.plan ?? "Free";
-  const renewalDate = subscription?.currentPeriodEnd
-    ? subscription.currentPeriodEnd.toLocaleDateString()
-    : undefined;
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("subscription")}</CardTitle>
-        <CardDescription>{t("subscriptionDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <BillingStatus plan={plan} renewalDate={renewalDate} />
-      </CardContent>
-    </Card>
-  );
-}

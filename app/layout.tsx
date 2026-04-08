@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/shared/providers/ThemeProvider";
-import { PaddleProvider } from "@/features/billing";
+
 import { SonnerToaster } from "@/shared/ui";
 import { generateSiteMetadata } from "@/features/seo";
 import { AnalyticsProvider, GAScript } from "@/features/analytics";
@@ -40,7 +40,7 @@ export default async function RootLayout({
           <ThemeProvider>
             <MonitoringProvider>
               <AnalyticsProvider>
-                <PaddleProvider>{children}</PaddleProvider>
+                {children}
               </AnalyticsProvider>
             </MonitoringProvider>
             <SonnerToaster richColors position="bottom-right" />
