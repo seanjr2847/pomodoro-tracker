@@ -2,6 +2,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/shared/providers/ThemeProvider";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 97a9b91764f415196c300c2eaf880163656b1071
 import { SonnerToaster } from "@/shared/ui";
 import { generateSiteMetadata } from "@/features/seo";
 import { AnalyticsProvider, GAScript } from "@/features/analytics";

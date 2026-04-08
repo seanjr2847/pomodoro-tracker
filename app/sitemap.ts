@@ -9,5 +9,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteConfig.url}/terms`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.3 },
   ];
 
+<<<<<<< HEAD
   return staticPages;
+=======
+  return [...staticPages];
+>>>>>>> 97a9b91764f415196c300c2eaf880163656b1071
 }
