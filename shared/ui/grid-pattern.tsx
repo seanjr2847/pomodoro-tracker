@@ -16,6 +16,7 @@ export function GridPattern({
     <svg
       className={cn("absolute inset-0 h-full w-full", className)}
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <defs>
         <pattern

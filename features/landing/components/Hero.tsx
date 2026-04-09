@@ -34,10 +34,14 @@ export function Hero() {
           <div className="max-w-xl text-center">
             {/* Title with slide-up animation */}
             <h1 className="animate-slide-up-fade font-sans text-4xl font-medium tracking-tight text-neutral-900 [--offset:20px] [animation-duration:1s] [animation-fill-mode:both] sm:text-5xl sm:leading-[1.15] dark:text-white">
-              {hero.title.split("\n").map((line, i) => (
+              {hero.title.split("\n").map((line, i, arr) => (
                 <span key={i}>
                   {i > 0 && <br />}
-                  {line}
+                  {i === arr.length - 1 ? (
+                    <span className="gradient-text">{line}</span>
+                  ) : (
+                    line
+                  )}
                 </span>
               ))}
             </h1>
@@ -51,7 +55,7 @@ export function Hero() {
             <div className="animate-slide-up-fade mt-8 flex flex-col items-center justify-center gap-4 [--offset:5px] [animation-delay:300ms] [animation-duration:1s] [animation-fill-mode:both] sm:flex-row">
               <Button
                 asChild
-                className="h-10 rounded-lg border border-black bg-black px-5 text-base text-white hover:ring-4 hover:ring-neutral-200 dark:border-white dark:bg-white dark:text-black dark:hover:ring-white/10"
+                className="btn-brand h-10 rounded-lg px-5 text-base transition-all hover:ring-4 hover:ring-[color-mix(in_oklab,var(--site-primary)_25%,transparent)] active:scale-95"
               >
                 <Link href={hero.cta.primary.href}>{hero.cta.primary.text}</Link>
               </Button>

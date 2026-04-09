@@ -23,7 +23,7 @@ export function Testimonial({ testimonial }: { testimonial: TestimonialData }) {
             <img
               src={testimonial.companyLogo}
               alt={testimonial.company}
-              className="mb-2 h-6 opacity-60"
+              className="mb-2 h-6 opacity-60 dark:opacity-40"
             />
           )}
           <div className="flex items-center gap-3">

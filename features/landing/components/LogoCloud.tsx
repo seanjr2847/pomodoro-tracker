@@ -6,7 +6,7 @@ export function LogoCloud() {
   if (logos.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-screen-md px-3 py-16 lg:px-4 xl:px-0">
+    <section className="mx-auto max-w-screen-lg px-3 py-16 lg:px-4 xl:px-0">
       <p className="text-center text-sm font-medium text-neutral-500 dark:text-neutral-400">
         Trusted by leading companies
       </p>

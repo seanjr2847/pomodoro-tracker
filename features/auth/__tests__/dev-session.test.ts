@@ -1,9 +1,12 @@
 import { describe, it, expect } from "vitest";
 
+// Prevent TypeScript from evaluating literal expressions at compile time
+const runtime = <T>(v: T): T => v;
+
 describe("devSession logic", () => {
   it("creates mock session when NODE_ENV=development and no GOOGLE_CLIENT_ID", () => {
-    const isDev = "development" === "development";
-    const noGoogleId = !undefined;
+    const isDev = runtime("development") === "development";
+    const noGoogleId = !runtime(undefined as string | undefined);
 
     const devSession =
       isDev && noGoogleId
@@ -24,8 +27,8 @@ describe("devSession logic", () => {
   });
 
   it("returns null when GOOGLE_CLIENT_ID is set", () => {
-    const isDev = "development" === "development";
-    const noGoogleId = !"some-client-id";
+    const isDev = runtime("development") === "development";
+    const noGoogleId = !runtime("some-client-id" as string | undefined);
 
     const devSession =
       isDev && noGoogleId
@@ -39,8 +42,8 @@ describe("devSession logic", () => {
   });
 
   it("returns null in production", () => {
-    const isDev = "production" === "development";
-    const noGoogleId = !undefined;
+    const isDev = runtime<string>("production") === "development";
+    const noGoogleId = !runtime(undefined as string | undefined);
 
     const devSession =
       isDev && noGoogleId

@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-// Import directly from content files to avoid pulling in LegalDocument.tsx (JSX)
-// via the barrel export, which vitest cannot parse in node environment.
-import { getPrivacyPolicy } from "@/features/legal/content/privacy";
-import { getTermsOfService } from "@/features/legal/content/terms";
+import { getPrivacyPolicy, getTermsOfService } from "@/features/legal";
 import { siteConfig } from "@/config/site";
 
 describe("getPrivacyPolicy", () => {

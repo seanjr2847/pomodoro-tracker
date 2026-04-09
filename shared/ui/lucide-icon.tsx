@@ -19,6 +19,14 @@ import {
   FileText,
   Database,
   Cloud,
+  Kanban,
+  History,
+  CreditCard,
+  MessageSquare,
+  GitBranch,
+  Triangle,
+  Home,
+  Key,
   type LucideIcon,
 } from "lucide-react";
 
@@ -43,6 +51,14 @@ const iconMap: Record<string, LucideIcon> = {
   FileText,
   Database,
   Cloud,
+  Kanban,
+  History,
+  CreditCard,
+  MessageSquare,
+  GitBranch,
+  Triangle,
+  Home,
+  Key,
 };
 
 export function LucideIconByName({
@@ -53,6 +69,6 @@ export function LucideIconByName({
   className?: string;
 }) {
   const Icon = iconMap[name];
-  if (!Icon) return <span className={className}>{name}</span>;
+  if (!Icon) return null;
   return <Icon className={className} />;
 }

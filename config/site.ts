@@ -82,8 +82,16 @@ export interface SiteConfig {
   };
 
   pricing: {
-    free: { name: string; price: string; features: string[] };
-    pro: { name: string; price: string; features: string[] };
+    plans: Array<{
+      id: string;
+      name: string;
+      price: string;
+      features: string[];
+      highlighted?: boolean;
+      cta: string;
+      href?: string;
+      priceId?: string;
+    }>;
   };
 
   legal: {
@@ -134,8 +142,9 @@ export const siteConfig: SiteConfig = {
   email: "hello@acme.example.com",
 
   theme: {
-    primary: "#171717",
-    gradient: "linear-gradient(135deg, #171717 0%, #404040 50%, #171717 100%)",
+    primary: "#6366f1",
+    primaryDark: "#818cf8",
+    gradient: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
   },
 
   banner: {
@@ -160,7 +169,7 @@ export const siteConfig: SiteConfig = {
       description:
         "Track every metric that matters with our powerful analytics dashboard.",
       href: "/#features",
-      image: null,
+      image: "https://placehold.co/960x540/f5f5f5/a3a3a3?text=Analytics+Dashboard",
     },
     {
       tab: "Automation",
@@ -168,7 +177,7 @@ export const siteConfig: SiteConfig = {
       description:
         "Automate repetitive tasks and focus on what truly matters.",
       href: "/#features",
-      image: null,
+      image: "https://placehold.co/960x540/f0f4ff/6366f1?text=Automation+Workflows",
     },
     {
       tab: "Collaboration",
@@ -176,11 +185,17 @@ export const siteConfig: SiteConfig = {
       description:
         "Work together seamlessly with built-in collaboration tools.",
       href: "/#features",
-      image: null,
+      image: "https://placehold.co/960x540/f0fdf4/16a34a?text=Team+Workspace",
     },
   ],
 
-  logos: [],
+  logos: [
+    { src: "https://cdn.worldvectorlogo.com/logos/vercel.svg", alt: "Vercel", href: "https://vercel.com" },
+    { src: "https://cdn.worldvectorlogo.com/logos/stripe-4.svg", alt: "Stripe", href: "https://stripe.com" },
+    { src: "https://cdn.worldvectorlogo.com/logos/notion-2.svg", alt: "Notion", href: "https://notion.so" },
+    { src: "https://cdn.worldvectorlogo.com/logos/linear-1.svg", alt: "Linear", href: "https://linear.app" },
+    { src: "https://cdn.worldvectorlogo.com/logos/figma-1.svg", alt: "Figma", href: "https://figma.com" },
+  ],
 
   value: {
     title: "Why teams choose Acme",
@@ -195,8 +210,8 @@ export const siteConfig: SiteConfig = {
       title: "Understand your users like never before",
       description:
         "Gain deep insights into user behavior with our powerful analytics engine. Track conversions, monitor engagement, and make data-driven decisions.",
-      cta: { text: "Learn more", href: "/#features" },
-      image: null,
+      cta: { text: "Explore Analytics", href: "/#features" },
+      image: "https://placehold.co/960x480/0f172a/94a3b8?text=User+Analytics+Overview",
       cards: [
         {
           icon: "BarChart3",
@@ -218,6 +233,34 @@ export const siteConfig: SiteConfig = {
         },
       ],
     },
+    {
+      badge: "Automation",
+      title: "Let the platform do the heavy lifting",
+      description:
+        "Build powerful workflows that run automatically. From onboarding emails to billing reminders — automate the repetitive so your team can focus on growth.",
+      cta: { text: "See Automation", href: "/#features" },
+      image: "https://placehold.co/960x480/0f172a/94a3b8?text=Workflow+Automation",
+      cards: [
+        {
+          icon: "Zap",
+          title: "Trigger-based Workflows",
+          description: "Fire actions on any user or system event.",
+          href: null,
+        },
+        {
+          icon: "Mail",
+          title: "Email Sequences",
+          description: "Drip campaigns that convert and retain.",
+          href: null,
+        },
+        {
+          icon: "Bell",
+          title: "Smart Notifications",
+          description: "Reach users on the right channel at the right time.",
+          href: null,
+        },
+      ],
+    },
   ],
 
   testimonials: [
@@ -228,11 +271,32 @@ export const siteConfig: SiteConfig = {
       role: "CTO",
       company: "TechCorp",
       companyLogo: null,
-      avatar: null,
+      avatar: "https://i.pravatar.cc/64?img=47",
+    },
+    {
+      quote:
+        "The best boilerplate we've used. Auth, billing, and dashboard — all production-ready from day one.",
+      name: "Alex Kim",
+      role: "Founder",
+      company: "Launchpad",
+      companyLogo: null,
+      avatar: "https://i.pravatar.cc/64?img=12",
     },
   ],
 
-  integrations: null,
+  integrations: {
+    title: "Connects with your stack",
+    description: "Plug into the tools your team already uses. No migration required.",
+    cta: { text: "View all integrations", href: "/#integrations" },
+    items: [
+      { name: "Stripe", icon: "CreditCard", href: "https://stripe.com" },
+      { name: "Slack", icon: "MessageSquare", href: "https://slack.com" },
+      { name: "GitHub", icon: "GitBranch", href: "https://github.com" },
+      { name: "Notion", icon: "FileText", href: "https://notion.so" },
+      { name: "Figma", icon: "Layers", href: "https://figma.com" },
+      { name: "Vercel", icon: "Triangle", href: "https://vercel.com" },
+    ],
+  },
 
   cta: {
     title: "Ready to get started?",
@@ -241,28 +305,36 @@ export const siteConfig: SiteConfig = {
   },
 
   pricing: {
-    free: {
-      name: "Free",
-      price: "$0",
-      features: [
-        "Up to 3 projects",
-        "Basic analytics",
-        "Community support",
-        "1GB storage",
-      ],
-    },
-    pro: {
-      name: "Pro",
-      price: "$19/mo",
-      features: [
-        "Unlimited projects",
-        "Advanced analytics",
-        "Priority support",
-        "100GB storage",
-        "Custom domains",
-        "Team collaboration",
-      ],
-    },
+    plans: [
+      {
+        id: "free",
+        name: "Free",
+        price: "$0",
+        features: [
+          "Up to 3 projects",
+          "Basic analytics",
+          "Community support",
+          "1GB storage",
+        ],
+        cta: "Get Started",
+        href: "/dashboard",
+      },
+      {
+        id: "pro",
+        name: "Pro",
+        price: "$19/mo",
+        features: [
+          "Unlimited projects",
+          "Advanced analytics",
+          "Priority support",
+          "100GB storage",
+          "Custom domains",
+          "Team collaboration",
+        ],
+        highlighted: true,
+        cta: "Upgrade to Pro",
+      },
+    ],
   },
 
   legal: {
@@ -301,7 +373,7 @@ export const siteConfig: SiteConfig = {
   },
 
   dashboardMenu: [
-    { label: "Kanban", href: "/dashboard/kanban", icon: "LayoutKanban" },
+    { label: "Kanban", href: "/dashboard/kanban", icon: "Kanban" },
     { label: "History", href: "/dashboard/history", icon: "History" },
   ],
 

@@ -44,7 +44,19 @@
       "Bash(grep -v \"^\\\\.$\\\\|^\\\\.\\\\.$\")",
       "Bash(grep -r \"require\\\\|import.*http\\\\|import.*child_process\" /e/Projects/factory-boilerplate/app /e/Projects/factory-boilerplate/features --include=*.ts --include=*.tsx)",
       "Bash(git worktree:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(mkdir -p \"D:/Projects/factory-boilerplate/.claude/agents/saas-boilerplate\")",
+      "Bash(mkdir -p \"D:/Projects/factory-boilerplate/.claude/agents/website-builder\")",
+      "Bash(mkdir -p \"D:/Projects/factory-boilerplate/.claude/agents/saas-qa\")",
+      "Bash(mkdir -p \".claude/skills/saas-boilerplate\")",
+      "Bash(mkdir -p \".claude/skills/website-builder\")",
+      "Bash(mkdir -p \".claude/skills/saas-qa\")",
+      "Bash(mv saas-orchestrator:*)",
+      "Bash(mv schema-design:*)",
+      "Bash(mv dashboard-builder:*)",
+      "Bash(mv api-builder:*)",
+      "Bash(mv deploy-config:*)",
+      "WebSearch"
     ]
   }
 }

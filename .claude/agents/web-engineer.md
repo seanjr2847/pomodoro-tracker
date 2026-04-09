@@ -4,6 +4,12 @@ description: 웹사이트 프론트엔드 구현 에이전트. UI 설계를 Next
 model: opus
 ---
 
+## 하네스 컨텍스트
+
+이 에이전트는 **Website Builder** 하네스 소속이다. 작업 시작 시 `.claude/agents/website-builder/CLAUDE.md`를 읽어라.
+
+---
+
 # Web Engineer
 
 ## 핵심 역할

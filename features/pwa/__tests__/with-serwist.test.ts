@@ -22,8 +22,6 @@ describe("withSerwist", () => {
     const withSerwistInit = vi.fn(() => initFn);
 
     // Intercept the `require` call inside withSerwist
-    const originalRequire = globalThis.require;
-    // @ts-expect-error - monkey-patching require for test
     const Module = await import("module");
     const origResolve = Module.default.prototype.require;
     Module.default.prototype.require = function (id: string) {

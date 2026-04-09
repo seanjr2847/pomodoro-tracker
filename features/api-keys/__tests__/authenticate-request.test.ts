@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock dependencies before importing
-vi.mock("../config/auth", () => ({
+vi.mock("@/features/auth", () => ({
   auth: vi.fn(),
 }));
 
-vi.mock("@/features/api-keys", () => ({
+vi.mock("../lib/apiKeys", () => ({
   validateApiKey: vi.fn(),
 }));
 
 import { authenticateRequest } from "../lib/authenticateRequest";
-import { auth } from "../config/auth";
-import { validateApiKey } from "@/features/api-keys";
+import { auth } from "@/features/auth";
+import { validateApiKey } from "../lib/apiKeys";
 
 const mockAuth = vi.mocked(auth);
 const mockValidateApiKey = vi.mocked(validateApiKey);
@@ -31,7 +31,7 @@ describe("authenticateRequest", () => {
     mockAuth.mockResolvedValue({
       user: { id: "user-1", email: "test@test.com", role: "ADMIN" },
       expires: "",
-    });
+    } as never);
 
     const result = await authenticateRequest(createRequest());
     expect(result).toEqual({
@@ -46,7 +46,7 @@ describe("authenticateRequest", () => {
     mockAuth.mockResolvedValue({
       user: { id: "user-2", email: "no-role@test.com" },
       expires: "",
-    });
+    } as never);
 
     const result = await authenticateRequest(createRequest());
     expect(result).toEqual({
@@ -57,7 +57,7 @@ describe("authenticateRequest", () => {
   });
 
   it("falls back to API key when no session", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockAuth.mockResolvedValue(null as never);
     mockValidateApiKey.mockResolvedValue({
       userId: "user-3",
       user: { id: "user-3", email: "api@test.com", role: "USER" },
@@ -75,10 +75,10 @@ describe("authenticateRequest", () => {
   });
 
   it("defaults API key user role to USER when null", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockAuth.mockResolvedValue(null as never);
     mockValidateApiKey.mockResolvedValue({
       userId: "user-4",
-      user: { id: "user-4", email: "api2@test.com", role: null },
+      user: { id: "user-4", email: "api2@test.com", role: null as never },
     });
 
     const result = await authenticateRequest(
@@ -88,7 +88,7 @@ describe("authenticateRequest", () => {
   });
 
   it("returns null when no session and no API key header", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockAuth.mockResolvedValue(null as never);
 
     const result = await authenticateRequest(createRequest());
     expect(result).toBeNull();
@@ -96,7 +96,7 @@ describe("authenticateRequest", () => {
   });
 
   it("returns null when API key is invalid", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockAuth.mockResolvedValue(null as never);
     mockValidateApiKey.mockResolvedValue(null);
 
     const result = await authenticateRequest(
@@ -109,7 +109,7 @@ describe("authenticateRequest", () => {
     mockAuth.mockResolvedValue({
       user: { id: "session-user", email: "s@t.com" },
       expires: "",
-    });
+    } as never);
     mockValidateApiKey.mockResolvedValue({
       userId: "api-user",
       user: { id: "api-user", email: "a@t.com", role: "USER" },

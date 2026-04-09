@@ -30,70 +30,39 @@ Next.js + Neon(PostgreSQL) + Prisma + Vercel.
 - @docs/TESTING.md — 테스트 작성, 테스트/린트 예외 기록 시
 - @docs/STYLEGUIDE.md — 코드 작성, 새 컴포넌트/Feature 모듈 추가 시
 
-## 하네스: SaaS Boilerplate Generator
+## 하네스 구성
 
-**목표:** SaaS 보일러플레이트를 에이전트 팀으로 생성/확장하여 solo founder가 하루 안에 배포할 수 있는 모노레포를 만든다.
+3개 하네스가 각자의 폴더로 분리되어 있다. 각 하네스 세부사항은 해당 폴더의 `CLAUDE.md`를 참조:
 
-**에이전트 팀:**
-| 에이전트 | 역할 |
-|---------|------|
-| architect | DB 스키마(Prisma), 인증(NextAuth), 멀티테넌시, 공유 계약/타입 설계 |
-| frontend | Next.js 15 App Router 대시보드 UI, 페이지, Feature 모듈 컴포넌트 |
-| backend | API 라우트, Server Actions, RBAC 미들웨어, 빌링(Paddle) 통합 |
-| devops | Docker, CI/CD(GitHub Actions), 환경변수, Vercel 배포 설정 |
-| qa-inspector | 모듈 간 통합 정합성 교차 검증 (API-프론트 경계면, 환경변수, 라우팅) |
-| design-director | 브랜드 아이덴티티, 컬러 시스템, 타이포그래피, 무드보드 |
-| ui-designer | 컴포넌트 설계, 레이아웃, 인터랙션 패턴, 반응형 전략 |
-| web-engineer | Next.js 구현, 시맨틱 HTML, 성능 최적화 |
-| a11y-auditor | WCAG 2.1 AA 감사, ARIA, 키보드 네비게이션, 접근성 수정 |
-
-**스킬:**
-| 스킬 | 용도 | 사용 에이전트 |
-|------|------|-------------|
-| saas-orchestrator | SaaS 팀 전체 조율 (파이프라인+팬아웃) | 리더(메인) |
-| schema-design | Prisma 스키마, 인증, 멀티테넌시, 공유 계약 | architect |
-| dashboard-builder | Next.js 대시보드 UI, 페이지, 컴포넌트 | frontend |
-| api-builder | API 라우트, Server Actions, RBAC, 빌링 | backend |
-| deploy-config | Docker, CI/CD, 환경변수, 배포 | devops |
-| contract-validator | 통합 정합성 교차 검증 | qa-inspector |
-| web-orchestrator | 웹사이트 구축 팀 전체 조율 (디자인→UI→구현→접근성) | 리더(메인) |
-| design-concept | 브랜드 아이덴티티, 컬러 시스템, 타이포그래피 수립 | design-director |
-| ui-system | 컴포넌트 설계, 레이아웃, 인터랙션 패턴 명세 | ui-designer |
-| web-builder | Next.js + Tailwind 구현, 성능 최적화, SEO | web-engineer |
-| a11y-checker | WCAG 2.1 AA 감사 + 코드 직접 수정 | a11y-auditor |
+| 하네스 | 컨텍스트 파일 | 트리거 스킬 | 에이전트 수 |
+|--------|-------------|-----------|-----------|
+| SaaS Boilerplate | `.claude/agents/saas-boilerplate/CLAUDE.md` | `saas-orchestrator` | 5명 |
+| Website Builder | `.claude/agents/website-builder/CLAUDE.md` | `web-orchestrator` | 4명 |
+| SaaS QA | `.claude/agents/saas-qa/CLAUDE.md` | `saas-qa-tester` | 1명 |
 
 **실행 규칙:**
-- SaaS 보일러플레이트 생성/확장/수정 요청 시 `saas-orchestrator` 스킬을 통해 에이전트 팀으로 처리
-- 웹사이트 구축/디자인/프론트엔드 생성 요청 시 `web-orchestrator` 스킬을 통해 에이전트 팀으로 처리
-- 단순 질문/확인은 에이전트 팀 없이 직접 응답
-- 모든 에이전트는 `model: "opus"` 사용
-- 중간 산출물: `_workspace/` 디렉토리
+- SaaS 보일러플레이트 생성/확장/수정 요청 → `saas-orchestrator` 스킬
+- 웹사이트 구축/디자인/프론트엔드 생성 요청 → `web-orchestrator` 스킬
+- SaaS 앱 QA/테스트/검증/채점/피드백 요청 → `saas-qa-tester` 스킬
+- 단순 질문/확인 → 에이전트 팀 없이 직접 응답
+- 모든 에이전트: `model: "opus"` | 중간 산출물: `_workspace/`
 
 **디렉토리 구조:**
 ```
 .claude/
 ├── agents/
-│   ├── architect.md
-│   ├── frontend.md
-│   ├── backend.md
-│   ├── devops.md
-│   ├── qa-inspector.md
-│   ├── design-director.md
-│   ├── ui-designer.md
-│   ├── web-engineer.md
-│   └── a11y-auditor.md
+│   ├── saas-boilerplate/   ← SaaS 하네스 컨텍스트
+│   │   └── CLAUDE.md
+│   ├── website-builder/    ← 웹사이트 하네스 컨텍스트
+│   │   └── CLAUDE.md
+│   ├── saas-qa/            ← QA 하네스 컨텍스트
+│   │   └── CLAUDE.md
+│   └── *.md                ← 에이전트 파일 (각자 하네스 CLAUDE.md 참조)
 └── skills/
-    ├── saas-orchestrator/
-    ├── schema-design/
-    ├── dashboard-builder/
-    ├── api-builder/
-    ├── deploy-config/
-    ├── contract-validator/
-    ├── web-orchestrator/
-    ├── design-concept/
-    ├── ui-system/
-    ├── web-builder/
-    └── a11y-checker/
+    ├── saas-boilerplate/   ← (빈 폴더, 그룹 표시용)
+    ├── website-builder/    ← (빈 폴더, 그룹 표시용)
+    ├── saas-qa/            ← (빈 폴더, 그룹 표시용)
+    └── */                  ← 스킬 파일 (flat, Claude Code 탐색 규칙)
 ```
 
 **변경 이력:**
@@ -101,3 +70,5 @@ Next.js + Neon(PostgreSQL) + Prisma + Vercel.
 |------|----------|------|------|
 | 2026-04-06 | 초기 구성 | 전체 | SaaS 보일러플레이트 생성 하네스 구축 |
 | 2026-04-08 | 웹 디자인 하네스 추가 | design-director, ui-designer, web-engineer, a11y-auditor + 5개 스킬 | 심미적 웹사이트 구축 + 접근성 하네스 신규 구축 |
+| 2026-04-08 | QA 테스터 하네스 추가 | saas-qa 에이전트 + saas-qa-tester 스킬 | 완성된 SaaS 앱 자동 검증 하네스 구축 |
+| 2026-04-09 | 하네스 3종 폴더 분리 | agents/saas-boilerplate/, agents/website-builder/, agents/saas-qa/ | 각 하네스가 전용 CLAUDE.md 읽도록 분리 |

@@ -22,7 +22,6 @@ describe("rateLimit (Upstash Redis path)", () => {
 
     origRequire = Module.prototype.require;
 
-    // @ts-expect-error - monkey-patching require for test
     Module.prototype.require = function (id: string) {
       if (id === "@upstash/ratelimit") {
         class FakeRatelimit {

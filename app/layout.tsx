@@ -1,4 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
+import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/shared/providers/ThemeProvider";
@@ -21,6 +22,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const notoSansKR = Noto_Sans_KR({
+  variable: "--font-noto-sans-kr",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata = generateSiteMetadata();
 
 export default async function RootLayout({
@@ -32,11 +39,18 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} ${notoSansKR.variable}`} suppressHydrationWarning>
       <head>
         <FeatureHeadScripts />
       </head>
-      <body className="antialiased">
+      <body
+        className="antialiased"
+        style={{
+          "--site-primary": siteConfig.theme.primary,
+          "--site-primary-dark": siteConfig.theme.primaryDark ?? siteConfig.theme.primary,
+          "--site-gradient": siteConfig.theme.gradient,
+        } as React.CSSProperties}
+      >
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"

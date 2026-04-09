@@ -1,17 +1,15 @@
 "use server";
 
-/**
- * contact + email Feature connection (app layer)
- *
- * When removing email Feature: delete this file and
- * remove the action prop from ContactForm in page.tsx.
- */
-
 import { siteConfig } from "@/config/site";
 import { sendEmail, ContactEmail } from "@/features/email";
-import { contactSchema, type ContactFormValues } from "@/features/contact";
+import { contactSchema, type ContactFormValues } from "../lib/schema";
 import { ok, fail, type ActionResult } from "@/shared/lib/actionResult";
 
+/**
+ * Contact form action with email integration.
+ * Sends the submitted form to siteConfig.email via the email feature.
+ * Falls back gracefully when RESEND_API_KEY is not set (email feature disabled).
+ */
 export async function submitContactWithEmail(
   data: ContactFormValues
 ): Promise<ActionResult<void>> {

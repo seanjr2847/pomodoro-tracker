@@ -5,3 +5,5 @@ export {
   listApiKeysAction,
   revokeApiKeyAction,
 } from "./actions/apiKeyActions";
+export { authenticateRequest } from "./lib/authenticateRequest";
+export type { AuthResult } from "./lib/authenticateRequest";

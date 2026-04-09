@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist", "Geist Fallback", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 
   --color-background: oklch(1 0 0);
@@ -153,6 +153,46 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Brand utility classes — siteConfig theme 연동 */
+.gradient-text {
+  background: var(--site-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.badge-brand {
+  background: color-mix(in oklab, var(--site-primary) 12%, transparent);
+  color: var(--site-primary);
+  border: 1px solid color-mix(in oklab, var(--site-primary) 20%, transparent);
+}
+
+.dark .badge-brand {
+  background: color-mix(in oklab, var(--site-primary-dark) 15%, transparent);
+  color: var(--site-primary-dark);
+  border-color: color-mix(in oklab, var(--site-primary-dark) 25%, transparent);
+}
+
+.btn-brand {
+  background-color: var(--site-primary);
+  color: white;
+  border: 1px solid var(--site-primary);
+}
+
+.btn-brand:hover {
+  background-color: color-mix(in oklab, var(--site-primary) 85%, black);
+}
+
+.dark .btn-brand {
+  background-color: var(--site-primary-dark);
+  color: oklch(0.145 0 0);
+  border-color: var(--site-primary-dark);
+}
+
+.dark .btn-brand:hover {
+  background-color: color-mix(in oklab, var(--site-primary-dark) 85%, white);
+}
+
 body {
   font-family: var(--font-sans);
 }
@@ -206,5 +246,16 @@ body {
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up-fade,
+  .animate-fade-in,
+  .animate-scale-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

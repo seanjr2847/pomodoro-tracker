@@ -16,15 +16,21 @@ export async function middleware(request: NextRequest) {
 
   // Dashboard auth guard — skip auth endpoints themselves
   if (pathname.startsWith("/dashboard")) {
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
+    // Dev mode: bypass when GOOGLE_CLIENT_ID is absent (same condition as devSession)
+    const isDevBypass =
+      process.env.NODE_ENV === "development" && !process.env.GOOGLE_CLIENT_ID;
 
-    if (!token) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
-      return NextResponse.redirect(url);
+    if (!isDevBypass) {
+      const token = await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+
+      if (!token) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/";
+        return NextResponse.redirect(url);
+      }
     }
   }
 

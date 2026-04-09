@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { authenticateRequest } from "@/features/auth";
+import { authenticateRequest } from "@/features/api-keys";
 import { streamText, isAIEnabled } from "@/features/ai-generation";
 
 export async function POST(request: Request) {

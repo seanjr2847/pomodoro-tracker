@@ -23,6 +23,7 @@ SaaS 보일러플레이트 생성 에이전트 팀을 조율하여 clone-and-shi
 
 ### Phase 0: 컨텍스트 확인
 
+0. **하네스 컨텍스트 로드**: `.claude/agents/saas-boilerplate/CLAUDE.md`를 읽어라. 에이전트 팀 구성, 스킬 목록, 실행 규칙을 파악한다.
 1. `_workspace/` 디렉토리 존재 여부 확인
 2. 실행 모드 결정:
    - **`_workspace/` 미존재** -> 초기 실행. Phase 1 진행

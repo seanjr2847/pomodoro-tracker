@@ -16,7 +16,7 @@ export function FeatureSection({ section }: { section: Section }) {
   return (
     <section id="features" className="mx-auto max-w-screen-lg px-3 lg:px-4 xl:px-0">
       <AnimateOnScroll animation="slide-up-fade" className="mx-auto max-w-xl text-center">
-        <span className="inline-block rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
+        <span className="badge-brand inline-block rounded-full px-3 py-1 text-xs font-medium">
           {section.badge}
         </span>
         <h2 className="mt-4 font-sans text-3xl font-medium tracking-tight text-neutral-900 dark:text-white">
@@ -38,7 +38,7 @@ export function FeatureSection({ section }: { section: Section }) {
           {section.cards.map((card, i) => (
             <AnimateOnScroll key={card.title} animation="slide-up-fade" delay={i * 100}>
             <Card
-              className="relative overflow-hidden border-neutral-200 bg-white transition-shadow hover:shadow-md dark:border-white/10 dark:bg-neutral-900"
+              className="relative overflow-hidden border-neutral-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-neutral-900"
             >
               {/* Rotating conic gradient per card */}
               <div
@@ -51,7 +51,7 @@ export function FeatureSection({ section }: { section: Section }) {
                   <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/40 to-transparent dark:from-white/[0.08]" />
                   <LucideIconByName
                     name={card.icon}
-                    className="relative z-10 h-5 w-5 text-neutral-600 dark:text-neutral-300"
+                    className="relative z-10 h-5 w-5 text-[var(--site-primary)] dark:text-[var(--site-primary-dark)]"
                   />
                 </div>
                 <h3 className="text-lg font-medium text-neutral-900 dark:text-white">

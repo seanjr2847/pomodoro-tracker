@@ -1,5 +1,5 @@
-import { auth } from "../config/auth";
-import { validateApiKey } from "@/features/api-keys";
+import { auth } from "@/features/auth";
+import { validateApiKey } from "./apiKeys";
 
 export interface AuthResult {
   userId: string;

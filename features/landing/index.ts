@@ -4,3 +4,5 @@ export { Footer } from "./components/Footer";
 export { PricingPlaceholder } from "./components/PricingPlaceholder";
 export { DashboardSidebar, MobileSidebar } from "./components/DashboardSidebar";
 export { DashboardTopbar } from "./components/DashboardTopbar";
+export { interleave } from "./lib/renderSections";
+export type { InterleavedItem } from "./lib/renderSections";

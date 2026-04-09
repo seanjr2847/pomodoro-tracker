@@ -45,7 +45,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-4 py-2 text-sm text-neutral-700 transition-colors hover:bg-neutral-900/5 dark:text-white/70 dark:hover:bg-white/10"
+              className="rounded-lg px-4 py-2 text-sm text-neutral-700 transition-colors hover:bg-neutral-900/5 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
             >
               {link.label}
             </Link>
@@ -57,7 +57,7 @@ export function Navbar() {
           <SignInButton variant="ghost" className="h-8 rounded-lg px-4 text-[0.8125rem]" label="Log in" />
           <SignInButton
             variant="default"
-            className="h-8 rounded-lg border border-black bg-black px-4 text-[0.8125rem] text-white hover:ring-4 hover:ring-neutral-200 dark:border-white dark:bg-white dark:text-black dark:hover:ring-white/10"
+            className="btn-brand h-8 rounded-lg px-4 text-[0.8125rem] hover:ring-4 hover:ring-[color-mix(in_oklab,var(--site-primary)_25%,transparent)]"
             label="Sign Up"
           />
         </div>
@@ -65,7 +65,7 @@ export function Navbar() {
         {/* Mobile Menu */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="lg:hidden">
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full" aria-label={open ? "Close menu" : "Open menu"}>
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </SheetTrigger>
@@ -83,7 +83,7 @@ export function Navbar() {
               ))}
               <div className="mt-4 flex flex-col gap-2">
                 <SignInButton variant="outline" className="h-10 rounded-lg border border-neutral-300 bg-white text-sm dark:border-white/20 dark:bg-transparent" label="Log in" />
-                <SignInButton variant="default" className="h-10 rounded-lg border border-black bg-black text-sm text-white dark:border-white dark:bg-white dark:text-black" label="Sign Up" />
+                <SignInButton variant="default" className="btn-brand h-10 rounded-lg text-sm" label="Sign Up" />
               </div>
             </div>
           </SheetContent>

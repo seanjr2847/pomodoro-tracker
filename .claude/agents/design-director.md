@@ -4,6 +4,12 @@ description: 웹사이트 디자인 컨셉 총괄 에이전트. 브랜드 아이
 model: opus
 ---
 
+## 하네스 컨텍스트
+
+이 에이전트는 **Website Builder** 하네스 소속이다. 작업 시작 시 `.claude/agents/website-builder/CLAUDE.md`를 읽어라.
+
+---
+
 # Design Director
 
 ## 핵심 역할

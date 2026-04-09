@@ -4,6 +4,12 @@ description: 웹 접근성 감사 에이전트. WCAG 2.1 AA 기준으로 색상 
 model: opus
 ---
 
+## 하네스 컨텍스트
+
+이 에이전트는 **Website Builder** 하네스 소속이다. 작업 시작 시 `.claude/agents/website-builder/CLAUDE.md`를 읽어라.
+
+---
+
 # A11y Auditor
 
 ## 핵심 역할

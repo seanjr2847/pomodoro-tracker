@@ -15,7 +15,7 @@ describe("requireRole", () => {
   });
 
   it("returns Unauthorized when no session", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockAuth.mockResolvedValue(null as never);
     const result = await requireRole("USER");
     expect(result).toEqual({ success: false, error: "Unauthorized" });
   });

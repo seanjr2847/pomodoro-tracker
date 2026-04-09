@@ -22,7 +22,7 @@ export function ValueProposition() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           {highlights.map((h, i) => (
             <AnimateOnScroll key={h} animation="scale-fade" delay={200 + i * 100}>
-              <span className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
+              <span className="badge-brand rounded-full px-4 py-2 text-sm font-medium">
                 {h}
               </span>
             </AnimateOnScroll>

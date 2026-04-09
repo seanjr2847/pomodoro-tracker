@@ -8,7 +8,7 @@ export function CTA() {
   const { cta } = siteConfig;
 
   return (
-    <section className="mx-auto mt-32 max-w-screen-lg px-3 lg:px-4 xl:px-0">
+    <section className="mx-auto mt-20 max-w-screen-lg px-3 lg:px-4 xl:px-0">
       <AnimateOnScroll animation="scale-fade">
       <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900">
         {/* Grid background with radial fade from top */}
@@ -38,7 +38,7 @@ export function CTA() {
           <div className="mt-10 flex items-center justify-center space-x-4">
             <Button
               asChild
-              className="h-10 rounded-lg border border-black bg-black px-5 text-base text-white hover:ring-4 hover:ring-neutral-200 dark:border-white dark:bg-white dark:text-black dark:hover:ring-white/10"
+              className="btn-brand h-10 rounded-lg px-5 text-base transition-all hover:ring-4 hover:ring-[color-mix(in_oklab,var(--site-primary)_25%,transparent)] active:scale-95"
             >
               <Link href={cta.button.href}>{cta.button.text}</Link>
             </Button>

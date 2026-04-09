@@ -9,9 +9,9 @@ import { Card, CardContent, Button } from "@/shared/ui";
 import { cn } from "@/shared/utils/cn";
 
 const tabIcons: Record<string, React.ReactNode> = {
-  Analytics: <BarChart3 className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
-  Automation: <Zap className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
-  Collaboration: <Users className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />,
+  Analytics: <BarChart3 className="h-5 w-5 text-[var(--site-primary)] dark:text-[var(--site-primary-dark)]" />,
+  Automation: <Zap className="h-5 w-5 text-[var(--site-primary)] dark:text-[var(--site-primary-dark)]" />,
+  Collaboration: <Users className="h-5 w-5 text-[var(--site-primary)] dark:text-[var(--site-primary-dark)]" />,
 };
 
 export function FeatureTabs() {
@@ -50,11 +50,11 @@ export function FeatureTabs() {
   if (featureTabs.length === 1) {
     const tab = featureTabs[0];
     return (
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <section className="mx-auto max-w-screen-lg px-3 py-20 lg:px-4 xl:px-0">
         <Card className="p-8">
           <CardContent className="p-0">
-            <h3 className="text-2xl font-bold">{tab.title}</h3>
-            <p className="mt-3 text-muted-foreground">{tab.description}</p>
+            <h3 className="font-sans text-xl font-semibold tracking-tight text-neutral-900 dark:text-white">{tab.title}</h3>
+            <p className="mt-3 text-base text-neutral-700 dark:text-neutral-300">{tab.description}</p>
             <Button asChild variant="outline" className="mt-6">
               <Link href={tab.href}>Learn more</Link>
             </Button>
@@ -68,7 +68,7 @@ export function FeatureTabs() {
   const activeData = featureTabs[activeIndex] ?? featureTabs[0];
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <section className="mx-auto max-w-screen-lg px-3 py-20 lg:px-4 xl:px-0">
       <div className="w-full">
         {/* Tab triggers */}
         <div
@@ -120,8 +120,8 @@ export function FeatureTabs() {
             >
               <Card className="p-8">
                 <CardContent className="p-0">
-                  <h3 className="text-2xl font-bold">{activeData.title}</h3>
-                  <p className="mt-3 text-muted-foreground">{activeData.description}</p>
+                  <h3 className="font-sans text-xl font-semibold tracking-tight text-neutral-900 dark:text-white">{activeData.title}</h3>
+                  <p className="mt-3 text-base text-neutral-700 dark:text-neutral-300">{activeData.description}</p>
                   <div className="mt-6 overflow-hidden rounded-lg border">
                     {activeData.image ? (
                       <img src={activeData.image} alt={activeData.title} className="w-full" />

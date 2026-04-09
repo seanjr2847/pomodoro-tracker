@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
-// Import directly from the module file to avoid pulling in jsonld.tsx (JSX)
-// via the barrel export, which vitest cannot parse in node environment.
-import { generateSiteMetadata } from "@/features/seo/metadata";
+import { generateSiteMetadata } from "@/features/seo";
 import { siteConfig } from "@/config/site";
 
 describe("generateSiteMetadata", () => {
@@ -33,12 +31,12 @@ describe("generateSiteMetadata", () => {
 
   it("sets openGraph type to website", () => {
     const metadata = generateSiteMetadata();
-    expect(metadata.openGraph?.type).toBe("website");
+    expect((metadata.openGraph as Record<string, unknown>)?.type).toBe("website");
   });
 
   it("sets twitter card to summary_large_image", () => {
     const metadata = generateSiteMetadata();
-    expect(metadata.twitter?.card).toBe("summary_large_image");
+    expect((metadata.twitter as Record<string, unknown>)?.card).toBe("summary_large_image");
   });
 
   it("sets robots index and follow to true", () => {

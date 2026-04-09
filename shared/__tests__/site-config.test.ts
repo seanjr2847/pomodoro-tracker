@@ -33,11 +33,12 @@ describe("siteConfig", () => {
     });
   });
 
-  it("has pricing with free and pro tiers", () => {
-    expect(siteConfig.pricing.free.name).toBeTruthy();
-    expect(siteConfig.pricing.free.features.length).toBeGreaterThan(0);
-    expect(siteConfig.pricing.pro.name).toBeTruthy();
-    expect(siteConfig.pricing.pro.features.length).toBeGreaterThan(0);
+  it("has at least one pricing plan", () => {
+    expect(siteConfig.pricing.plans.length).toBeGreaterThan(0);
+    siteConfig.pricing.plans.forEach((plan) => {
+      expect(plan.name).toBeTruthy();
+      expect(plan.features.length).toBeGreaterThan(0);
+    });
   });
 
   it("has legal.companyName without trailing double period", () => {

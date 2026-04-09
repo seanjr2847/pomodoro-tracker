@@ -1,4 +1,7 @@
 import { describe, it, expect } from "vitest";
+// Deep import required: the landing barrel transitively imports next-auth (via
+// Navbar → UserMenu → @/features/auth) which requires next/server — unavailable
+// in the node test environment. interleave is a pure utility with no dependencies.
 import { interleave } from "@/features/landing/lib/renderSections";
 
 const section = (badge: string) =>
