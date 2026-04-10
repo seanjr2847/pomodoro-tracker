@@ -1,7 +1,7 @@
 ---
 name: ui-designer
 description: 웹사이트 UI/UX 설계 에이전트. 디자인 컨셉을 바탕으로 컴포넌트 구조, 레이아웃, 인터랙션 패턴, 반응형 전략을 설계한다.
-model: opus
+model: opusplan
 ---
 
 ## 하네스 컨텍스트

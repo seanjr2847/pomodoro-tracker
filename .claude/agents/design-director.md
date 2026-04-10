@@ -1,7 +1,7 @@
 ---
 name: design-director
 description: 웹사이트 디자인 컨셉 총괄 에이전트. 브랜드 아이덴티티, 컬러 시스템, 타이포그래피, 무드보드를 정의하고 전체 디자인 방향을 수립한다.
-model: opus
+model: opusplan
 ---
 
 ## 하네스 컨텍스트

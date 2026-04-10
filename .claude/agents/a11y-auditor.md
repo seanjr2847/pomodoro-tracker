@@ -1,7 +1,7 @@
 ---
 name: a11y-auditor
 description: 웹 접근성 감사 에이전트. WCAG 2.1 AA 기준으로 색상 대비, ARIA 레이블, 키보드 네비게이션, 스크린 리더 호환성을 검증하고 수정 방안을 제시한다.
-model: opus
+model: opusplan
 ---
 
 ## 하네스 컨텍스트

@@ -36,39 +36,32 @@ Next.js + Neon(PostgreSQL) + Prisma + Vercel.
 
 | 하네스 | 컨텍스트 파일 | 트리거 스킬 | 에이전트 수 |
 |--------|-------------|-----------|-----------|
-| SaaS Boilerplate | `.claude/agents/saas-boilerplate/CLAUDE.md` | `saas-orchestrator` | 5명 |
 | Website Builder | `.claude/agents/website-builder/CLAUDE.md` | `web-orchestrator` | 4명 |
 | SaaS QA | `.claude/agents/saas-qa/CLAUDE.md` | `saas-qa-tester` | 1명 |
+| Full-Stack Dev | `.claude/agents/fullstack-dev/CLAUDE.md` | `fullstack-orchestrator` | 4명 |
 
 **실행 규칙:**
-- SaaS 보일러플레이트 생성/확장/수정 요청 → `saas-orchestrator` 스킬
 - 웹사이트 구축/디자인/프론트엔드 생성 요청 → `web-orchestrator` 스킬
 - SaaS 앱 QA/테스트/검증/채점/피드백 요청 → `saas-qa-tester` 스킬
+- 풀스택 기능 개발/spec.md 기반 구현/페이지+API 구현 요청 → `fullstack-orchestrator` 스킬
 - 단순 질문/확인 → 에이전트 팀 없이 직접 응답
-- 모든 에이전트: `model: "opus"` | 중간 산출물: `_workspace/`
+- 중간 산출물: `_workspace/`
 
 **디렉토리 구조:**
 ```
 .claude/
 ├── agents/
-│   ├── saas-boilerplate/   ← SaaS 하네스 컨텍스트
-│   │   └── CLAUDE.md
 │   ├── website-builder/    ← 웹사이트 하네스 컨텍스트
 │   │   └── CLAUDE.md
 │   ├── saas-qa/            ← QA 하네스 컨텍스트
 │   │   └── CLAUDE.md
+│   ├── fullstack-dev/      ← 풀스택 개발 하네스 컨텍스트
+│   │   └── CLAUDE.md
 │   └── *.md                ← 에이전트 파일 (각자 하네스 CLAUDE.md 참조)
 └── skills/
-    ├── saas-boilerplate/   ← (빈 폴더, 그룹 표시용)
-    ├── website-builder/    ← (빈 폴더, 그룹 표시용)
-    ├── saas-qa/            ← (빈 폴더, 그룹 표시용)
-    └── */                  ← 스킬 파일 (flat, Claude Code 탐색 규칙)
+    ├── fullstack-orchestrator/   ← 풀스택 팀 오케스트레이터
+    ├── architecture-design/      ← spec 기반 구현 계획
+    ├── frontend-build/           ← Next.js 프론트엔드 구현
+    ├── api-build/                ← API/Server Action/Prisma 구현
+    └── integration-qa/           ← 통합 정합성 검증
 ```
-
-**변경 이력:**
-| 날짜 | 변경 내용 | 대상 | 사유 |
-|------|----------|------|------|
-| 2026-04-06 | 초기 구성 | 전체 | SaaS 보일러플레이트 생성 하네스 구축 |
-| 2026-04-08 | 웹 디자인 하네스 추가 | design-director, ui-designer, web-engineer, a11y-auditor + 5개 스킬 | 심미적 웹사이트 구축 + 접근성 하네스 신규 구축 |
-| 2026-04-08 | QA 테스터 하네스 추가 | saas-qa 에이전트 + saas-qa-tester 스킬 | 완성된 SaaS 앱 자동 검증 하네스 구축 |
-| 2026-04-09 | 하네스 3종 폴더 분리 | agents/saas-boilerplate/, agents/website-builder/, agents/saas-qa/ | 각 하네스가 전용 CLAUDE.md 읽도록 분리 |

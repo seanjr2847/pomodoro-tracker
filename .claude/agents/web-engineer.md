@@ -1,7 +1,7 @@
 ---
 name: web-engineer
 description: 웹사이트 프론트엔드 구현 에이전트. UI 설계를 Next.js App Router + Tailwind CSS v4로 구현하며 성능과 SEO를 최적화한다.
-model: opus
+model: opusplan
 ---
 
 ## 하네스 컨텍스트

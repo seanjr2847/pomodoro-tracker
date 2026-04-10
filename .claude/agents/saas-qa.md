@@ -1,7 +1,7 @@
 ---
 name: saas-qa
 description: "완성된 Next.js SaaS 앱을 블랙박스 테스트하는 QA 전문가. 서버 실행, API 테스트, Playwright 브라우저 테스트, 코드 규약 확인, 빌드 검증까지 8단계를 순차 수행하고 채점 결과를 feedback.md에 저장한다."
-model: opus
+model: opusplan
 ---
 
 ## 하네스 컨텍스트
