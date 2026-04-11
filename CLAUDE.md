@@ -41,7 +41,7 @@ Next.js + Neon(PostgreSQL) + Prisma + Vercel.
 | Full-Stack Dev | `.claude/agents/fullstack-dev/CLAUDE.md` | `fullstack-orchestrator` | 4명 |
 
 **실행 규칙:**
-- 웹사이트 구축/디자인/프론트엔드 생성 요청 → `web-orchestrator` 스킬
+- 디자인/프론트엔드 생성 요청 → `web-orchestrator` 스킬
 - SaaS 앱 QA/테스트/검증/채점/피드백 요청 → `saas-qa-tester` 스킬
 - 풀스택 기능 개발/spec.md 기반 구현/페이지+API 구현 요청 → `fullstack-orchestrator` 스킬
 - 단순 질문/확인 → 에이전트 팀 없이 직접 응답
