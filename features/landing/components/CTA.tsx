@@ -17,12 +17,12 @@ export function CTA() {
           className="text-neutral-100 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,black_30%,transparent)] dark:text-neutral-800"
         />
 
-        {/* Conic gradient — dub.co CTA style */}
+        {/* Conic gradient — spec.md colors */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.08] blur-[130px]"
           style={{
             background:
-              "conic-gradient(from -66deg, #855AFC -32deg, #f00 63deg, #EAB308 158deg, #5CFF80 240deg, #855AFC 328deg, #f00 423deg)",
+              "conic-gradient(from -66deg, #E84A5F -32deg, #F06477 63deg, #7BC8A4 158deg, #E84A5F 240deg, #F06477 328deg, #7BC8A4 423deg)",
           }}
         />
 
