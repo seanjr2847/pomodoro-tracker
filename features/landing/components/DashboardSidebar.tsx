@@ -42,11 +42,11 @@ interface MenuItem {
 
 function getGroupedMenuItems() {
   return {
-    primary: [{ label: "Home", href: "/dashboard", icon: "Home" }] as MenuItem[],
+    primary: [{ label: "홈", href: "/dashboard", icon: "Home" }] as MenuItem[],
     workspace: (siteConfig.dashboardMenu ?? []) as MenuItem[],
     account: [
-      { label: "API Keys", href: "/dashboard/api-keys", icon: "Key" },
-      { label: "Settings", href: "/dashboard/settings", icon: "Settings" },
+      { label: "API 키", href: "/dashboard/api-keys", icon: "Key" },
+      { label: "설정", href: "/dashboard/settings", icon: "Settings" },
     ] as MenuItem[],
   };
 }
@@ -262,7 +262,7 @@ function SidebarContent({
         />
         {workspace.length > 0 && (
           <NavGroup
-            label="Workspace"
+            label="워크스페이스"
             items={workspace}
             collapsed={collapsed}
             pathname={pathname}
@@ -270,7 +270,7 @@ function SidebarContent({
           />
         )}
         <NavGroup
-          label="Account"
+          label="계정"
           items={account}
           collapsed={collapsed}
           pathname={pathname}
