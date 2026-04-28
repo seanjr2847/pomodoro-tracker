@@ -3,107 +3,76 @@
 ## 점수 요약
 | 영역 | 점수 | 가중치 | 가중 점수 |
 |------|------|--------|----------|
-| 기능 완성도 | 3/10 | 30% | 0.9 |
-| 디자인 품질 | 4/10 | 30% | 1.2 |
-| 사용성 | 3/10 | 20% | 0.6 |
-| 코드 품질 | 2/10 | 20% | 0.4 |
-| **가중 평균** | | | **3.1** |
+| 기능 완성도 | 6/10 | 30% | 1.8 |
+| 디자인 품질 | 5/10 | 30% | 1.5 |
+| 사용성 | 4/10 | 20% | 0.8 |
+| 코드 품질 | 8/10 | 20% | 1.6 |
+| **가중 평균** | | | **5.7** |
 
 ---
 
 ## 블로킹 이슈 (FAIL 사유)
 
-### 1. [CRITICAL] 빌드 실패 ⛔
-**위치:** `app/dashboard/page.tsx:48`
-```
-Type error: 'todayStats' is possibly 'undefined'.
-```
+### 1. [CRITICAL] 언어 일관성 위반 (spec.md 15행: "영어 잔재 절대 금지") ⛔
 
-**원인:**
-```typescript
-const todayStats =
-  todayResult.status === "fulfilled" && todayResult.value.success
-    ? todayResult.value.data
-    : { totalMinutes: 0, sessionCount: 0 };
-
-const hasAnyData = todayStats.sessionCount > 0 || categoryStats.length > 0;
-```
-- `todayResult.value.data`가 undefined일 수 있는데 fallback이 제대로 작동하지 않음
-- TypeScript strict mode에서 컴파일 실패
-
-**영향:** Vercel 배포 시 100% 실패. 프로덕션 빌드 불가.
-
-**수정:**
-```typescript
-const todayStats =
-  todayResult.status === "fulfilled" && todayResult.value.success && todayResult.value.data
-    ? todayResult.value.data
-    : { totalMinutes: 0, sessionCount: 0 };
-```
-
----
-
-### 2. [CRITICAL] 테스트 실패 (2개) ⛔
-Vercel 빌드 명령: `pnpm lint && pnpm test && pnpm build`
-
-#### 2-1. shared/__tests__/site-config.test.ts
-```
-FAIL: expected null to be truthy
-siteConfig.about is null
-```
-- spec.md에 about 섹션 없음 (정상)
-- 하지만 boilerplate 테스트가 about 필수로 체크함
-- **해결:** 테스트 삭제 또는 `about: null` 허용하도록 수정
-
-#### 2-2. features/landing/__tests__/pricing.test.ts
-```
-FAIL: expected '₩0' to match /\$/
-```
-- 한국 SaaS인데 테스트가 달러 기호 강제
-- **해결:** 정규식을 `/₩|원|\$/`로 수정
-
-**영향:** `pnpm test` 실패 → Vercel 빌드 실패
-
----
-
-### 3. [CRITICAL] 언어 일관성 위반 (spec.md 14행: "영어 잔재 절대 금지") ⛔
-
-**위치:** `features/landing/components/Navbar.tsx`
-
-**영어 하드코딩 (5곳):**
-```typescript
-const navLinks = [
-  { label: "Features", href: "/#features" },    // ❌ 기능
-  { label: "Pricing", href: "/pricing" },       // ❌ 요금제
-  { label: "Blog", href: "/blog" },             // ❌ 블로그
-];
-
-<SignInButton label="Log in" />                 // ❌ 로그인
-<SignInButton label="Sign Up" />                // ❌ 회원가입
-```
-
-**Playwright 검증 결과:**
-- `/pricing` 페이지: 영어 카피 6개 이상 ("Features", "Pricing", "Blog", "Log in", "Sign Up")
-- 랜딩 페이지 Header: 영어 3개 (Features, Pricing, Blog)
-
-**spec.md 위반:**
+**spec.md 명시사항:**
 > 언어: **한국어 단일.** 모든 UI/카피/에러/알림 한국어. **영어 잔재 절대 금지.**
 
-**수정:**
-```typescript
-const navLinks = [
-  { label: "기능", href: "/#features" },
-  { label: "요금제", href: "/pricing" },
-  { label: "블로그", href: "/blog" },
-];
+**발견된 영어 카피:**
 
-<SignInButton label="로그인" />
-<SignInButton label="회원가입" />
+#### 위치 1: 랜딩 페이지 Feature Tab
+```bash
+$ curl -s http://localhost:3003/ | grep -o '>Learn more<'
+>Learn more<
 ```
+- "Learn more" → "자세히 보기" 또는 "더 알아보기"로 수정 필요
+
+#### 위치 2: Footer (모든 페이지)
+- `_timer-desktop.png` 스크린샷에서 확인:
+  - "Product" → "제품"
+  - "Company" → "회사"
+  - "Legal" → "법률"
+  - "Features", "Pricing", "Blog", "About", "Privacy", "Terms"
+
+**영향:** spec.md 핵심 요구사항 위반. 사용자 경험 일관성 파괴.
+
+**수정 우선순위:** P0 (즉시)
 
 ---
 
-### 4. [CRITICAL] 페이지 간 일관성 위반 (헤더/푸터 누락) ⛔
+### 2. [CRITICAL] 페이지 렌더링 실패 ⛔
+
+#### /categories 페이지
+**Playwright UX 검사 결과:**
+```json
+"/categories": {
+  "desktop": {
+    "status": 200,
+    "h1Count": 0,
+    "headerExists": false,
+    "footerExists": false,
+    "koreanCount": 0,
+    "englishWords": 2,
+    "langRatio": 0
+  }
+}
+```
+
+**스크린샷 증거:** `/tmp/pw-shots/_categories-desktop.png`
+- 로딩 스피너만 보임
+- 헤더/푸터/메인 콘텐츠 전혀 없음
+- 한국어 텍스트 0개
+
+**원인 추정:**
+- Client-side 렌더링 실패 또는 무한 로딩
+- Server Action 에러로 데이터 못 가져옴
+- 에러 핸들링 없어서 빈 화면
+
+**영향:** spec.md F-2 핵심 기능 (카테고리 CRUD) 작동 불가
+
+---
+
+### 3. [CRITICAL] 페이지 간 일관성 위반 (헤더/푸터 누락) ⛔
 
 **Playwright UX 검사 결과:**
 ```json
@@ -114,336 +83,324 @@ const navLinks = [
 ```
 
 **헤더 누락 페이지:**
-- `/timer`: headerExists = false
 - `/categories`: headerExists = false
+- (다른 페이지는 존재)
 
 **푸터 누락 페이지:**
-- `/timer`: footerExists = false
-- `/dashboard`: footerExists = false
 - `/categories`: footerExists = false
+- `/dashboard`: footerExists = false
 
 **영향:**
-- 사용자가 `/timer`에서 다른 페이지로 이동 불가 (네비게이션 없음)
+- 사용자가 `/categories`에서 다른 페이지로 이동 불가 (네비게이션 없음)
 - 일관된 UX 경험 파괴
-- 7-pre-B 판정 룰: `headerEverywhere === false` → **FAIL**
-
-**스크린샷 증거:**
-- `/timer-desktop.png`: 헤더/푸터 없이 타이머만 덩그러니 있음
-- `/categories-desktop.png`: 로딩 스피너만 보이고 아무 내용 없음
+- Step 7-pre-B 판정 룰: `headerEverywhere === false` → **FAIL**
 
 ---
 
-### 5. [CRITICAL] 페이지 렌더링 실패 ⛔
+### 4. [HIGH] 시맨틱 HTML 위반 ⚠️
 
-**Playwright 라우트 테스트 결과:**
+**h1 누락 페이지:**
+- `/dashboard`: h1Count = 0
+- `/categories`: h1Count = 0
+- `/pricing`: h1Count = 0
 
-#### /categories 페이지
-- **Status:** 200이지만 **콘텐츠 빈 페이지**
-- **h1Count:** 0 (시맨틱 HTML 위반)
-- **langRatio:** 0 (한국어 텍스트 0개!)
-- **스크린샷:** 로딩 스피너만 무한 회전
-
-**원인 추정:**
-- Client-side 렌더링 실패
-- Server Action 에러로 데이터 못 가져옴
-- 에러 핸들링 없어서 빈 화면
-
-#### /dashboard 페이지
-- **h1Count:** 0 → 감점
-- **langRatio:** 0.38 < 0.5 → **FAIL** (한국어 SaaS 기준)
-- 사이드바 메뉴에 영어 ("API Keys", "Settings")
-
-#### /pricing 페이지
-- **h1Count:** 0 → 감점
-- **langRatio:** 0.52 (간신히 통과, 하지만 Navbar 영어 5개 포함)
+**영향:**
+- SEO 저하
+- 접근성 위반 (스크린 리더 사용자에게 페이지 주제 전달 불가)
+- Step 7-pre-B 판정 룰: `h1Count !== 1` → **감점**
 
 ---
 
-### 6. [HIGH] 404 페이지에 영어 텍스트 ⚠️
+### 5. [HIGH] 한국어 비율 위반 ⚠️
 
-**Playwright 여정 테스트 결과:**
-```json
-"notFoundPage": {
-  "statusFound": true,
-  "hasReturnLink": true,
-  "text": "404\n\nThe page you're looking for doesn't exist.\n\nGo home"
-}
-```
+**Playwright langRatio 검사 결과:**
+- `/dashboard` desktop: 0.38 < 0.5 → **FAIL** (한국어 SaaS 기준)
+  - koreanCount: 9, englishWords: 15
+  - 사이드바 메뉴에 영어 ("Home", "API Keys", "Settings")
 
-**영어 문구:**
-- "The page you're looking for doesn't exist."
-- "Go home"
-
-**수정:** app/not-found.tsx에서 한국어로 변경
-```typescript
-"페이지를 찾을 수 없습니다."
-"홈으로"
-```
+**원인:** Dashboard 레이아웃이 보일러플레이트 기본 영어 메뉴 사용
 
 ---
 
-## 기능 완성도: 3/10
+## 기능 완성도: 6/10
 
 ### [PASS] 구현된 기능
-✅ F-1. 포모도로 타이머 (`/timer`)
-- 25:00 카운트다운 표시
-- 시작/중지/스킵 버튼
-- 세션 전환 UI (작업/휴식/긴 휴식)
-- ⚠️ 하지만 헤더/푸터 없어서 고립됨
 
-✅ F-4. 통계 대시보드 (`/dashboard`)
-- 빈 상태 UI 완벽 (Coffee 아이콘 + 4단 구조)
-- ⚠️ 실제 데이터 렌더링은 빌드 에러로 테스트 불가
+✅ **F-1. 포모도로 타이머 (`/timer`)**
+- HTTP 200 정상 응답
+- 25:00 타이머 UI 렌더링
+- 시작/중지/스킵 버튼 (lucide-react 아이콘)
+- 세션 전환 탭 (작업/휴식/긴 휴식)
+- 스크린샷에서 확인됨
+- ⚠️ 타이머 실제 작동은 Server Actions로 테스트 불가 (브라우저 테스트 필요)
+
+✅ **F-4. 통계 대시보드 (`/dashboard`)**
+- HTTP 200 정상 응답
+- 사이드바 레이아웃 (Home, 통계, 카테고리, API Keys, Settings)
+- "로딩 중..." fallback UI
+- ⚠️ 실제 차트 렌더링은 빈 상태에서 확인 못함
+
+✅ **F-5. 인증**
+- `/login` 페이지: HTTP 200
+- NextAuth 설정 완료 (API route 존재)
 
 ### [FAIL] 누락/불완전 기능
-❌ F-2. 작업 카테고리 (`/categories`)
-- 페이지 존재하나 **렌더링 실패** (빈 화면)
+
+❌ **F-2. 작업 카테고리 (`/categories`)**
+- 페이지 존재하나 **렌더링 완전 실패** (빈 화면)
 - 색상 8가지 프리셋 확인 불가
-- CRUD 작동 여부 불명
+- CRUD 작동 여부 확인 불가
+- Server Actions은 코드에 존재 (`features/categories/actions/categoryActions.ts`)
 
-❌ F-3. 세션 기록
-- 코드 존재 여부 확인 못함 (빌드 실패로)
-- 마지막 7일/30일 세션 리스트 UI 안 보임
+❌ **F-3. 세션 기록**
+- 코드는 존재 (`features/pomodoro/actions/sessionActions.ts`)
+- Dashboard에서 렌더링되어야 하나 빈 상태만 보임
+- 실제 세션 리스트 UI 확인 불가
 
-❌ F-5. 인증
-- `/login` 페이지 → **404 Not Found**
-- NextAuth 설정은 되어 있으나 login 페이지 없음
-- Navbar에 "Log in"/"Sign Up" 버튼은 있음 (영어)
+### [PARTIAL] 빌드 명령 (Vercel 배포 기준)
 
-### [PARTIAL] F-4. 통계 대시보드
-- Chart 컴포넌트 코드 존재
-- 빌드 에러로 실제 작동 확인 불가
-- 빈 상태만 확인됨
+**실행 결과:**
+```bash
+✅ pnpm lint: 통과 (No ESLint warnings or errors)
+✅ pnpm test: 통과 (243 tests passed)
+✅ pnpm build: 성공 (경고만 있음, exit code 0)
+```
 
-**pnpm lint:** ✅ 통과
-**pnpm test:** ❌ 2개 실패
-**pnpm build:** ❌ TypeScript 에러
+**경고사항:**
+- Edge Runtime 경고 (Upstash Redis, Jose)
+- 심각도: 낮음 (빌드 성공, 배포 가능)
+
+**평가:** Vercel 배포는 가능하나 런타임 페이지 렌더링 문제 있음
 
 ---
 
-## 디자인 품질: 4/10
+## 디자인 품질: 5/10
 
-### [FAIL] AI 디자인 체크리스트
-- [x] 보라/파란 그라데이션 + 빈 카드 → spec.md Hero에 그라데이션 배경 있음 (하지만 spec 명시한 토마토색)
-- [ ] 의미없는 아이콘 이모지 → lucide-react 사용 (양호)
-- [ ] 기본 Tailwind 스타일 무변경 → 커스터마이징 있음
-- [ ] 모두 같은 검색 카드 레이아웃 → 검색 기능 없음
-- [x] 의미없는 장식적 섹션 → 랜딩 페이지에 빈 공간 많음
+### [PASS] AI 디자인 체크리스트
+- [ ] 보라/파란 그라데이션 + 빈 카드 → neutral 계열 사용 ✅
+- [ ] 의미없는 아이콘 이모지 → lucide-react 사용 ✅
+- [ ] 기본 Tailwind 스타일 무변경 → 커스터마이징 있음 ✅
+- [ ] 모두 같은 검색 카드 레이아웃 → 검색 기능 없음 ✅
+- [x] 의미없는 장식적 섹션 → 랜딩 페이지에 빈 공간 많음 ⚠️
 
 ### [PASS] config/site.ts 일치
 ✅ Primary color: `#E84A5F` (토마토색)
-✅ Gradient: `linear-gradient(135deg, #E84A5F 0%, #F06477 50%, #7BC8A4 100%)`
-✅ 모든 카피 한국어 (config 파일 내에서는 완벽)
+- Playwright에서 확인: `primaryColor: "rgb(232, 74, 95)"`
+✅ spec.md 명시한 색상과 정확히 일치
 
-### [FAIL] 시각 직관성 (스크린샷 분석)
+### [GOOD] 시각 직관성 (스크린샷 분석)
 
 #### `_-desktop.png` (랜딩)
 **5초 룰 평가:**
-1. **무슨 사이트인지 알 수 있나?** ⚠️ 부분 통과
-   - Hero 카피 "25분 집중. 5분 휴식. 끝없는 성장." → 명확
-   - 하지만 스크롤 전엔 거의 빈 화면 (hero 아래 큰 공백)
-2. **다음 뭐 해야 할지 명확?** ✅ 통과
+1. **무슨 사이트인지?** ✅ 통과
+   - "25분 집중. 5분 휴식. 끝없는 성장." 즉시 이해됨
+2. **다음 뭐 해야?** ✅ 통과
    - "무료로 시작" primary CTA 토마토색으로 강조
-3. **시각적 위계:** ⚠️ 보통
-   - H1 크기 적절
-   - 하지만 콘텐츠가 fold 아래로 밀려남 (초기 뷰에서 보이지 않음)
-4. **읽힘 (legibility):** ✅ 통과
-   - 대비 충분
-5. **밀도/공백:** ❌ 실패
-   - Hero 아래 과도한 공백 (의미없는 빈 영역)
-   - 탭 메뉴가 거의 안 보임
-6. **시각 일관성:** ⚠️ 보통
+3. **시각적 위계:** ✅ 통과
+   - H1 크기 적절, 시선 이동 자연스러움
+4. **읽힘:** ✅ 통과
+   - 대비 충분, 모바일에서도 명확
+5. **밀도/공백:** ⚠️ 보통
+   - Hero 아래 섹션들이 fade 효과로 보이지 않음
+6. **시각 일관성:** ✅ 통과
 
-**판정:** 3번, 5번 NO → **감점 2개**
+**판정:** 5번 보통 → **감점 1개**
 
 #### `_timer-desktop.png` (타이머)
 **5초 룰 평가:**
 1. **무슨 사이트인지?** ✅ 통과
    - "포모도로 타이머" H1 명확
 2. **다음 뭐 해야?** ✅ 통과
-   - "시작" 버튼 크고 토마토색
+   - "시작" 버튼 크고 토마토색, 즉시 눈에 띔
 3. **시각적 위계:** ✅ 통과
-   - 25:00 큰 폰트, 시각적으로 지배적
+   - 25:00 숫자가 시각적으로 지배적
 4. **읽힘:** ✅ 통과
 5. **밀도/공백:** ✅ 통과
    - 깔끔한 카드 레이아웃
-6. **시각 일관성:** ❌ 실패
-   - **헤더/푸터 없음 → 다른 페이지와 완전히 다른 디자인**
-   - 사용자가 혼란스러움 (이게 같은 사이트 맞나?)
+6. **시각 일관성:** ✅ 통과
+   - 토마토색 primary 일관성 유지
 
-**판정:** 6번 NO → **감점 1개**
+**판정:** 모두 통과
 
-#### `_categories-desktop.png` (카테고리)
-**5초 룰 평가:**
-1-6. **모두 NO** → 로딩 스피너만 보임 (렌더링 실패)
+#### `_categories-desktop.png`
+**판정:** **FAIL** (페이지 렌더링 실패)
 
-**판정:** **FAIL** (페이지 깨짐)
-
-#### `_dashboard-desktop.png` (대시보드)
-- 사이드바 레이아웃 (앱 UI 스타일)
+#### `_dashboard-desktop.png`
+- 사이드바 앱 스타일 레이아웃
 - "로딩 중..." 텍스트만 보임
-- 실제 차트 확인 불가
+- 실제 콘텐츠 확인 불가
 
 ---
 
-## 사용성: 3/10
+## 사용성: 4/10
 
-### [FAIL] 첫 진입 시 안내
-- 랜딩 페이지: 카피는 명확하나 **콘텐츠 대부분이 fold 아래** (스크롤해야 보임)
-- 타이머 페이지: 안내 문구 있음 ("로그인하면 통계를 확인하고...") ✅
-- 카테고리 페이지: 렌더링 실패 ❌
+### [GOOD] 잘된 점
 
-### [PASS] 빈 상태 UI
-✅ **완벽한 4단 구조** (spec.md 128-135행 준수)
-- Coffee 아이콘 (lucide)
-- "아직 완료한 포모도로가 없어요"
-- "타이머를 시작해서 첫 사이클을 완료해보세요"
-- "타이머 시작" 버튼 → `/timer`
+✅ **타이머 페이지 안내 문구**
+- "로그인하면 통계를 확인하고 카테고리별 분류를 관리할 수 있습니다."
+- 명확한 가이드
 
-**코드:** `app/dashboard/page.tsx:51-73`
+✅ **버튼 접근성**
+- Playwright 검사: `btnNoLabel: 0`, `linkNoText: 0`
+- 모든 버튼에 텍스트 또는 aria-label 있음
 
-### [FAIL] 에러 피드백
-- `/categories` 렌더링 실패 시 에러 메시지 없음 (무한 로딩)
-- Console errors: CSP 위반 경고 (모든 페이지)
+✅ **이미지 접근성**
+- `imgNoAlt: 0` → 모든 이미지에 alt 또는 aria-hidden
 
-### [UNKNOWN] 로딩 상태
-- Dashboard: "로딩 중..." 텍스트만 (Suspense fallback)
-- 너무 단순, 스켈레톤 UI 권장
+### [FAIL] 문제점
 
-### [PASS] 404 페이지
-✅ 존재함
-✅ "홈으로" 링크 있음
-⚠️ 하지만 영어 텍스트 ("The page you're looking for doesn't exist.")
+❌ **카테고리 페이지 렌더링 실패**
+- 무한 로딩, 에러 메시지 없음
+- 사용자가 막힘
 
-### [FAIL] 접근성
-**Playwright 접근성 검사:**
-- `btnNoLabel`: 0 ✅
-- `linkNoText`: 0 ✅
-- `imgNoAlt`: 0 ✅
-- `headerExists`: 3개 페이지 누락 ❌
-- `footerExists`: 4개 페이지 누락 ❌
+❌ **Dashboard 빈 상태만 보임**
+- 실제 데이터로 차트 렌더링 확인 불가
+- "로딩 중..." 텍스트만 있음 (스켈레톤 UI 권장)
 
-**Console Errors:**
-- CSP 위반 (모든 페이지): EvalError unsafe-eval
+❌ **Console Errors**
+- 모든 페이지에서 CSP 위반 경고
+- `EvalError: Evaluating a string as JavaScript violates CSP`
 - 심각도: 중간 (기능에는 영향 없으나 보안 경고)
 
+❌ **헤더/푸터 누락으로 네비게이션 불가**
+- `/categories`에서 다른 페이지로 이동 수단 없음
+
+### [PASS] 404 페이지
+- 존재함, 200 응답
+
 ---
 
-## 코드 품질: 2/10
+## 코드 품질: 8/10
 
-### [FAIL] Feature-Based 준수
+### [PASS] Feature-Based 준수
+
 **디렉토리 구조:**
 ```
 features/
 ├── pomodoro/
-│   ├── actions/sessionActions.ts ✅
+│   ├── actions/sessionActions.ts ✅ "use server"
 │   ├── components/ ✅
 │   ├── hooks/ ✅
-│   └── types/ ✅
+│   ├── types/ ✅
+│   └── index.ts ✅ barrel export
 ├── categories/
 │   ├── actions/categoryActions.ts ✅
-│   └── components/ ✅
+│   ├── components/ ✅
+│   ├── hooks/ ✅
+│   ├── types/ ✅
+│   └── index.ts ✅
 └── statistics/
     ├── actions/statsActions.ts ✅
     └── components/ ✅
 ```
+
 ✅ Server Actions이 features/{name}/actions/에 있음
 ✅ Barrel export (index.ts) 존재
-
-**BUT:**
-❌ `features/landing/components/Navbar.tsx`에 **비즈니스 로직 하드코딩**
-- navLinks 배열이 컴포넌트 내부에 있음
-- config/site.ts에 있어야 함
-
-### [FAIL] 타입 안정성
-❌ `app/dashboard/page.tsx:48` - TypeScript 에러
-```typescript
-const hasAnyData = todayStats.sessionCount > 0 || categoryStats.length > 0;
-                   ^^^^^^^^^ possibly undefined
-```
+✅ app/ 디렉토리에 로직 없음 (올바른 분리)
 
 ### [PASS] Server Action ↔ UI 분리
-✅ `features/statistics/actions/statsActions.ts` → Server Actions
-✅ `features/statistics/components/TodayCard.tsx` → Client Component
+
+**검증:**
+```typescript
+// features/categories/actions/categoryActions.ts
+"use server";
+export async function getCategoriesAction() {
+  const session = await auth();
+  // ... DB 로직
+}
+```
+
 ✅ `"use server"` directive 제대로 사용
+✅ DB 접근은 Server Actions에만 있음
+✅ Client Components는 Server Actions 호출만
 
 ### [PASS] App Router 규약
-✅ `app/dashboard/page.tsx` - async Server Component
-✅ `app/timer/page.tsx` - Client Component (타이머 상태 관리)
-✅ Suspense 경계 사용
+✅ async Server Component 사용
+✅ Suspense 경계 있음
+✅ Client Components에 `"use client"`
 
-### [FAIL] pnpm lint / pnpm test / pnpm build
+### [PASS] Prisma Schema
+✅ User, Category, Session 모델 존재
+✅ spec.md 데이터 모델과 일치
+
+### [PASS] 빌드 명령
 - **pnpm lint:** ✅ 통과
-- **pnpm test:** ❌ 2개 실패
-- **pnpm build:** ❌ TypeScript 에러
+- **pnpm test:** ✅ 243개 통과
+- **pnpm build:** ✅ 성공
 
-**Vercel 빌드 명령과 동일하므로 배포 100% 실패**
+### [MINOR] 개선 필요
 
-### [PARTIAL] 에러 핸들링
-✅ Promise.allSettled 사용 (dashboard)
-⚠️ 하지만 TypeScript 타입 체크 통과 못함
-❌ `/categories` 렌더링 실패 시 fallback 없음
+⚠️ **Footer 컴포넌트 하드코딩**
+- 영어 텍스트가 컴포넌트에 직접 작성됨
+- config/site.ts에서 관리해야 함
+
+⚠️ **CSP 경고**
+- Edge Runtime 사용 시 Node.js API 경고
+- 심각도: 낮음
 
 ---
 
 ## 수정 우선순위
 
-### 1. [P0 - BLOCKER] 빌드 에러 수정
-**파일:** `app/dashboard/page.tsx:48`
+### 1. [P0 - BLOCKER] 영어 카피 한국어로 변경
+
+#### 파일 1: 랜딩 Feature Tab
+위치 특정 필요 (grep 결과 "Learn more")
 ```typescript
 // Before
-const hasAnyData = todayStats.sessionCount > 0 || categoryStats.length > 0;
+"Learn more"
 
 // After
-const hasAnyData = (todayStats?.sessionCount ?? 0) > 0 || categoryStats.length > 0;
+"자세히 보기"
 ```
 
-### 2. [P0 - BLOCKER] 테스트 수정
-**파일 1:** `shared/__tests__/site-config.test.ts`
-```typescript
-// 삭제하거나
-it("has about section with team and values", () => {
-  if (!siteConfig.about) {
-    expect(siteConfig.about).toBeNull(); // 명시적으로 null 허용
-    return;
-  }
-  expect(siteConfig.about.team.length).toBeGreaterThan(0);
-});
-```
-
-**파일 2:** `features/landing/__tests__/pricing.test.ts`
+#### 파일 2: Footer 컴포넌트
+모든 영어 섹션 제목/링크 한국어로
 ```typescript
 // Before
-expect(plan.price).toMatch(/\$/);
+"Product", "Company", "Legal"
+"Features", "Pricing", "Blog", "About", "Privacy", "Terms"
 
 // After
-expect(plan.price).toMatch(/₩|원|\$/); // 한국/미국 통화 모두 허용
+"제품", "회사", "법률"
+"기능", "요금제", "블로그", "소개", "개인정보", "약관"
 ```
 
-### 3. [P0 - BLOCKER] Navbar 한국어 변경
-**파일:** `features/landing/components/Navbar.tsx`
-```typescript
-// Line 12-14
-const navLinks = [
-  { label: "기능", href: "/#features" },
-  { label: "요금제", href: "/pricing" },
-  { label: "블로그", href: "/blog" },
-];
+---
 
-// Line 57, 61, 85, 86
-<SignInButton label="로그인" />
-<SignInButton label="회원가입" />
+### 2. [P0 - BLOCKER] /categories 렌더링 수정
+
+**디버깅 필요:**
+- Server Actions 에러 로그 확인
+- Client-side 데이터 fetching 로직 검토
+- 에러 발생 시 fallback UI 추가
+
+**임시 수정 (에러 바운더리):**
+```typescript
+// app/categories/error.tsx
+'use client'
+export default function Error({ error }: { error: Error }) {
+  return (
+    <div>
+      <h1>카테고리를 불러오는데 실패했습니다</h1>
+      <p>{error.message}</p>
+    </div>
+  )
+}
 ```
 
-### 4. [P0 - BLOCKER] 페이지 레이아웃 통일
-**타이머/카테고리 페이지에 헤더/푸터 추가**
+---
 
-**파일:** `app/timer/layout.tsx` (새로 생성)
+### 3. [P0 - BLOCKER] 페이지 헤더/푸터 통일
+
+**방법:** `/categories`에 레이아웃 추가
+
 ```typescript
+// app/categories/layout.tsx (새로 생성)
 import { Navbar } from "@/features/landing/components/Navbar";
 import { Footer } from "@/features/landing/components/Footer";
 
-export default function TimerLayout({ children }: { children: React.ReactNode }) {
+export default function CategoriesLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
@@ -454,93 +411,80 @@ export default function TimerLayout({ children }: { children: React.ReactNode })
 }
 ```
 
-동일하게 `app/categories/layout.tsx` 생성
+---
 
-### 5. [P0 - BLOCKER] /categories 렌더링 수정
-**디버깅 필요:**
-- Server Actions 에러 확인
-- Client-side 데이터 fetching 로직 검토
-- 에러 발생 시 fallback UI 추가
+### 4. [P1 - HIGH] h1 태그 추가
 
-**임시 수정 (에러 바운더리):**
-```typescript
-// app/categories/error.tsx
-'use client'
-export default function Error() {
-  return <div>카테고리를 불러오는데 실패했습니다.</div>
-}
-```
+#### /dashboard
+- 이미 코드에 있을 수 있음 (빈 상태에서 테스트해서 안 보였을 가능성)
+- 데이터 렌더링 후 재확인
 
-### 6. [P1 - HIGH] 404 페이지 한국어
-**파일:** `app/not-found.tsx`
+#### /pricing
+- 페이지 상단에 h1 추가
+
+---
+
+### 5. [P1 - HIGH] Dashboard 사이드바 메뉴 한국어
+
 ```typescript
 // Before
-"The page you're looking for doesn't exist."
-"Go home"
+"Home", "API Keys", "Settings"
 
 // After
-"페이지를 찾을 수 없습니다."
-"홈으로"
+"홈", "API 키", "설정"
 ```
 
-### 7. [P1 - HIGH] /login 페이지 생성
-**파일:** `app/login/page.tsx` (현재 404)
-- NextAuth 로그인 UI 추가
-- 또는 `/api/auth/signin`으로 리다이렉트
+---
 
-### 8. [P2 - MEDIUM] Dashboard h1 추가
-**파일:** `app/dashboard/page.tsx:84`
-```typescript
-// Before
-<h1 className="text-3xl font-bold">통계 대시보드</h1>
-
-// 이미 있음! 하지만 Playwright가 못 잡음 (로딩 중 상태에서 테스트?)
-// 빌드 성공 후 재테스트 필요
-```
-
-### 9. [P2 - MEDIUM] 랜딩 페이지 공백 줄이기
-- Hero 섹션과 Feature Tabs 사이 공백 과다
-- `features/landing/components/LandingPage.tsx` 여백 조정
-
-### 10. [P3 - LOW] CSP 경고 해결
+### 6. [P2 - MEDIUM] CSP 경고 해결
 - next.config.ts에서 Content Security Policy 설정
 - 'unsafe-eval' 필요 여부 검토
+- 또는 Edge Runtime 사용하지 않기
 
 ---
 
 ## 추가 발견 사항
 
 ### [GOOD] 잘된 점
-1. ✅ **빈 상태 UI 완벽** - spec.md 4단 구조 정확히 준수
+1. ✅ **빌드 명령 모두 통과** - lint, test, build 성공
 2. ✅ **lucide-react 아이콘** - 이모지 없음
-3. ✅ **config/site.ts 완벽** - 모든 카피 한국어, 색상 정확
-4. ✅ **Feature-Based 구조** - Server Actions 분리 잘됨
-5. ✅ **타이머 UI 깔끔** - 25:00 큰 폰트, 버튼 명확
+3. ✅ **Feature-Based 구조 완벽** - Server Actions 분리 잘됨
+4. ✅ **타이머 UI 깔끔** - 25:00 큰 폰트, 버튼 명확
+5. ✅ **Primary 색상 정확** - #E84A5F 토마토색 일관성
+6. ✅ **접근성 기본** - alt, aria-label 모두 있음
+7. ✅ **243개 테스트 통과** - 높은 코드 품질
 
 ### [BAD] 아쉬운 점
-1. ❌ **Navbar 영어 하드코딩** - 가장 눈에 띄는 곳에 5개 영어 단어
-2. ❌ **빌드/테스트 실패** - Vercel 배포 즉시 실패
-3. ❌ **페이지 간 디자인 불일치** - 타이머는 헤더 없음, 대시보드는 사이드바
-4. ❌ **카테고리 페이지 깨짐** - 핵심 기능 F-2 작동 불가
-5. ❌ **랜딩 페이지 빈 공간** - fold 위에 콘텐츠 부족
+1. ❌ **영어 카피 잔재** - Footer, "Learn more" (spec 위반)
+2. ❌ **카테고리 페이지 깨짐** - 핵심 기능 F-2 작동 불가
+3. ❌ **페이지 간 불일치** - categories 헤더/푸터 없음
+4. ❌ **h1 누락** - dashboard, pricing, categories
+5. ❌ **Dashboard 빈 상태만** - 실제 차트 확인 못함
 
 ---
 
 ## 최종 평가
 
 ### 통과 불가 사유
-1. **pnpm build 실패** → Vercel 배포 불가
-2. **pnpm test 실패** → CI/CD 파이프라인 중단
-3. **spec.md 언어 규칙 위반** → 영어 카피 5개 이상
-4. **핵심 기능 작동 불가** → /categories 렌더링 실패
-5. **페이지 간 일관성 파괴** → 헤더/푸터 누락
+1. **spec.md 언어 규칙 위반** → 영어 카피 "Learn more" + Footer 영어 섹션
+2. **핵심 기능 작동 불가** → /categories 렌더링 실패 (F-2)
+3. **페이지 간 일관성 파괴** → categories 헤더/푸터 누락
+4. **시맨틱 HTML 위반** → 3개 페이지 h1 없음
+5. **한국어 비율 위반** → Dashboard 0.38 < 0.5
+
+### 긍정적 평가
+- ✅ **pnpm lint/test/build 모두 성공** → Vercel 배포 자체는 가능
+- ✅ **Feature-Based 구조 완벽** → 유지보수성 높음
+- ✅ **타이머 페이지 우수** → 핵심 기능 UI 잘 구현됨
+- ✅ **색상 일관성** → Primary 토마토색 정확히 사용
 
 ### 권장 액션
-1. ✅ 위 수정 우선순위 1-5번 **즉시** 적용 (P0)
-2. ✅ 빌드 성공 후 재평가 요청
-3. ⚠️ Playwright 스크린샷 다시 확인 (현재는 빌드 실패 상태 캡처)
-4. ⚠️ 모든 페이지에 헤더/푸터 통일
-5. ⚠️ `/login` 페이지 구현 (현재 404)
+1. ✅ 위 수정 우선순위 1-3번 **즉시** 적용 (P0)
+2. ✅ /categories 디버깅 우선 (가장 심각)
+3. ✅ 모든 영어 카피 한국어 변경
+4. ✅ 헤더/푸터 통일
+5. ⚠️ h1 태그 추가
+6. ⚠️ Dashboard 실제 데이터로 테스트 (seed 데이터 확인)
 
 ---
 
@@ -553,22 +497,29 @@ export default function Error() {
 - [x] ###RESULT### JSON 블록 있음 (아래 참조)
 
 ### QA 단계
-- [x] Step 1: 서버 실행 (성공)
+- [x] Step 1: 서버 실행 (성공, 3003 포트)
 - [x] Step 2: 스펙 확인 (완료)
-- [x] Step 3: API 테스트 (Server Actions 확인)
-- [x] Step 4: Playwright 프론트엔드 테스트 (실행, 문제 발견)
+- [x] Step 3: API 테스트 (Server Actions 확인, 200 응답)
+- [x] Step 4: Playwright 프론트엔드 테스트 (실행, 200 응답, 문제 발견)
 - [x] Step 7-pre: UX 종합 검수 (FAIL 판정)
-- [x] Step 7: 빌드 테스트 (lint 통과, test 실패, build 실패)
+  - [x] 7-pre-A: 정적 검사 (영어 카피 발견)
+  - [x] 7-pre-B: Playwright UX 검사 (일관성 위반)
+  - [x] 7-pre-D: 스크린샷 시각 검수 (5초 룰)
+- [x] Step 7: 빌드 테스트 (lint ✅, test ✅, build ✅)
 
 ### 평가 기준
-- [x] 기능 완성도 (3/10)
-- [x] 디자인 품질 (4/10)
-- [x] 사용성 (3/10)
-- [x] 코드 품질 (2/10)
+- [x] 기능 완성도 (6/10) - build 성공하나 렌더링 문제
+- [x] 디자인 품질 (5/10) - 색상 일치하나 영어 카피
+- [x] 사용성 (4/10) - 접근성 기본은 있으나 일관성 문제
+- [x] 코드 품질 (8/10) - Feature-Based 완벽, 테스트 통과
 
 ---
 
 **평가 완료일:** 2026-04-28
 **평가자:** Next.js QA Agent
 **프로젝트:** pomodoro-tracker
-**최종 판정:** FAIL (가중 평균 3.1/10)
+**최종 판정:** FAIL (가중 평균 5.7/10)
+**주요 실패 사유:**
+1. spec.md 언어 규칙 위반 (영어 카피)
+2. /categories 렌더링 실패
+3. 페이지 간 일관성 위반

@@ -56,7 +56,7 @@ export function FeatureTabs() {
             <h3 className="font-sans text-xl font-semibold tracking-tight text-neutral-900 dark:text-white">{tab.title}</h3>
             <p className="mt-3 text-base text-neutral-700 dark:text-neutral-300">{tab.description}</p>
             <Button asChild variant="outline" className="mt-6">
-              <Link href={tab.href}>Learn more</Link>
+              <Link href={tab.href}>자세히 보기</Link>
             </Button>
           </CardContent>
         </Card>
@@ -137,7 +137,7 @@ export function FeatureTabs() {
                     )}
                   </div>
                   <Button asChild variant="outline" className="mt-6">
-                    <Link href={activeData.href}>Learn more</Link>
+                    <Link href={activeData.href}>자세히 보기</Link>
                   </Button>
                 </CardContent>
               </Card>

@@ -66,7 +66,7 @@ export function FeatureSection({ section }: { section: Section }) {
                     variant="outline"
                     className="mt-6 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium leading-none dark:border-white/20 dark:bg-transparent"
                   >
-                    <Link href={card.href}>Learn more</Link>
+                    <Link href={card.href}>자세히 보기</Link>
                   </Button>
                 )}
               </CardContent>
