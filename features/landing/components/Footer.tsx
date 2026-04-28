@@ -3,25 +3,25 @@ import { siteConfig } from "@/config/site";
 
 const columns = [
   {
-    title: "Product",
+    title: "제품",
     links: [
-      { label: "Features", href: "/#features" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "Blog", href: "/blog" },
+      { label: "기능", href: "/#features" },
+      { label: "요금제", href: "/pricing" },
+      { label: "블로그", href: "/blog" },
     ],
   },
   {
-    title: "Company",
+    title: "회사",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Blog", href: "/blog" },
+      { label: "소개", href: "/about" },
+      { label: "블로그", href: "/blog" },
     ],
   },
   {
-    title: "Legal",
+    title: "법률",
     links: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Terms", href: "/terms" },
+      { label: "개인정보", href: "/privacy" },
+      { label: "약관", href: "/terms" },
     ],
   },
 ];
@@ -58,7 +58,7 @@ export function Footer() {
             {siteConfig.social && (
               <div>
                 <h3 className="text-sm font-medium text-neutral-900 dark:text-white">
-                  Social
+                  소셜
                 </h3>
                 <ul className="mt-2.5 flex flex-col gap-3.5">
                   {siteConfig.social.twitter && (
