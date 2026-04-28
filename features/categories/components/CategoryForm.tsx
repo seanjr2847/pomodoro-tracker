@@ -9,9 +9,11 @@ import { COLOR_PRESETS } from "../types";
 import { createCategoryAction } from "../actions/categoryActions";
 import { toast } from "sonner";
 
+type ColorPreset = typeof COLOR_PRESETS[number]["value"];
+
 export function CategoryForm() {
   const [name, setName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(COLOR_PRESETS[0].value);
+  const [selectedColor, setSelectedColor] = useState<ColorPreset>(COLOR_PRESETS[0].value);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
