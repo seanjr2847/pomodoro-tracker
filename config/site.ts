@@ -135,128 +135,119 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Acme SaaS",
-  description: "The modern platform to supercharge your workflow.",
-  url: "https://acme.example.com",
-  creator: "Acme Inc.",
-  email: "hello@acme.example.com",
+  name: "Pomodoro Tracker",
+  description: "25분 집중. 5분 휴식. 끝없는 성장.",
+  url: "https://pomodoro-tracker.vercel.app",
+  creator: "Pomodoro Tracker",
+  email: "hello@pomodoro-tracker.com",
 
   theme: {
-    primary: "#6366f1",
-    primaryDark: "#818cf8",
-    gradient: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
+    primary: "#E84A5F",
+    primaryDark: "#F06477",
+    gradient: "linear-gradient(135deg, #E84A5F 0%, #F06477 50%, #7BC8A4 100%)",
   },
 
-  banner: {
-    text: "We just launched v2.0 — Check out what's new!",
-    href: "/blog",
-  },
+  banner: null,
 
   hero: {
-    title: "Build faster.\nShip smarter.",
+    title: "25분 집중. 5분 휴식.\n끝없는 성장.",
     subtitle:
-      "Everything you need to launch your SaaS in days, not months. Authentication, billing, and a beautiful landing page — all in one template.",
+      "포모도로 기법으로 작업 시간을 측정하고, 카테고리별 통계로 집중도를 시각화하세요.",
     cta: {
-      primary: { text: "Get Started Free", href: "/dashboard" },
-      secondary: { text: "View on GitHub", href: "https://github.com" },
+      primary: { text: "무료로 시작", href: "/timer" },
+      secondary: { text: "기능 보기", href: "#features" },
     },
   },
 
   featureTabs: [
     {
-      tab: "Analytics",
-      title: "Real-time Analytics",
+      tab: "타이머",
+      title: "스마트 포모도로 타이머",
       description:
-        "Track every metric that matters with our powerful analytics dashboard.",
-      href: "/#features",
-      image: "https://placehold.co/960x540/f5f5f5/a3a3a3?text=Analytics+Dashboard",
+        "25분 작업 + 5분 휴식이 자동으로 전환됩니다. 4사이클 후 15분 긴 휴식.",
+      href: "/timer",
+      image: null,
     },
     {
-      tab: "Automation",
-      title: "Smart Automation",
+      tab: "통계",
+      title: "시각화된 생산성 분석",
       description:
-        "Automate repetitive tasks and focus on what truly matters.",
-      href: "/#features",
-      image: "https://placehold.co/960x540/f0f4ff/6366f1?text=Automation+Workflows",
+        "카테고리별 시간 분포, 일일/주간/월간 트렌드를 한눈에 확인하세요.",
+      href: "/dashboard",
+      image: null,
     },
     {
-      tab: "Collaboration",
-      title: "Team Collaboration",
+      tab: "카테고리",
+      title: "맞춤형 작업 분류",
       description:
-        "Work together seamlessly with built-in collaboration tools.",
-      href: "/#features",
-      image: "https://placehold.co/960x540/f0fdf4/16a34a?text=Team+Workspace",
+        "공부, 코딩, 운동 등 자신만의 카테고리를 만들고 색상으로 구분하세요.",
+      href: "/categories",
+      image: null,
     },
   ],
 
-  logos: [
-    { src: "https://cdn.worldvectorlogo.com/logos/vercel.svg", alt: "Vercel", href: "https://vercel.com" },
-    { src: "https://cdn.worldvectorlogo.com/logos/stripe-4.svg", alt: "Stripe", href: "https://stripe.com" },
-    { src: "https://cdn.worldvectorlogo.com/logos/notion-2.svg", alt: "Notion", href: "https://notion.so" },
-    { src: "https://cdn.worldvectorlogo.com/logos/linear-1.svg", alt: "Linear", href: "https://linear.app" },
-    { src: "https://cdn.worldvectorlogo.com/logos/figma-1.svg", alt: "Figma", href: "https://figma.com" },
-  ],
+  logos: [],
 
   value: {
-    title: "Why teams choose Acme",
+    title: "왜 포모도로 기법인가요?",
     description:
-      "We help thousands of teams ship better products, faster. Our platform handles the infrastructure so you can focus on building.",
-    highlights: ["10x faster", "99.9% uptime", "Enterprise-grade security"],
+      "25분 집중 사이클은 과학적으로 검증된 생산성 향상 기법입니다. 짧은 휴식으로 피로를 줄이고 장시간 몰입할 수 있습니다.",
+    highlights: ["집중력 향상", "번아웃 방지", "자동 기록"],
   },
 
   sections: [
     {
-      badge: "Analytics",
-      title: "Understand your users like never before",
+      badge: "타이머",
+      title: "간편한 포모도로 타이머",
       description:
-        "Gain deep insights into user behavior with our powerful analytics engine. Track conversions, monitor engagement, and make data-driven decisions.",
-      cta: { text: "Explore Analytics", href: "/#features" },
-      image: "https://placehold.co/960x480/0f172a/94a3b8?text=User+Analytics+Overview",
+        "시작 버튼 하나로 25분 작업이 시작됩니다. 타이머가 끝나면 브라우저 알림으로 자동 안내됩니다.",
+      cta: { text: "타이머 시작", href: "/timer" },
+      image: null,
       cards: [
         {
-          icon: "BarChart3",
-          title: "Real-time Dashboards",
-          description: "Monitor your key metrics in real-time.",
+          icon: "Play",
+          title: "원클릭 시작",
+          description: "복잡한 설정 없이 바로 시작하세요.",
           href: null,
         },
         {
-          icon: "TrendingUp",
-          title: "Growth Tracking",
-          description: "Track your growth trajectory over time.",
+          icon: "Bell",
+          title: "자동 알림",
+          description: "작업/휴식 전환 시 브라우저 알림.",
           href: null,
         },
         {
-          icon: "Users",
-          title: "User Segmentation",
-          description: "Segment users by behavior and attributes.",
+          icon: "SkipForward",
+          title: "유연한 제어",
+          description: "일시정지, 중지, 스킵 자유롭게.",
           href: null,
         },
       ],
     },
     {
-      badge: "Automation",
-      title: "Let the platform do the heavy lifting",
+      badge: "통계",
+      title: "데이터로 보는 나의 집중력",
       description:
-        "Build powerful workflows that run automatically. From onboarding emails to billing reminders — automate the repetitive so your team can focus on growth.",
-      cta: { text: "See Automation", href: "/#features" },
-      image: "https://placehold.co/960x480/0f172a/94a3b8?text=Workflow+Automation",
+        "완료한 포모도로 개수, 카테고리별 시간 분포, 7일/30일 트렌드를 차트로 확인하세요.",
+      cta: { text: "통계 보기", href: "/dashboard" },
+      image: null,
       cards: [
         {
-          icon: "Zap",
-          title: "Trigger-based Workflows",
-          description: "Fire actions on any user or system event.",
+          icon: "BarChart3",
+          title: "주간 누적 시간",
+          description: "이번 주 얼마나 집중했는지 Bar 차트로.",
           href: null,
         },
         {
-          icon: "Mail",
-          title: "Email Sequences",
-          description: "Drip campaigns that convert and retain.",
+          icon: "PieChart",
+          title: "카테고리 비중",
+          description: "어떤 작업에 시간을 많이 썼는지 Pie 차트로.",
           href: null,
         },
         {
-          icon: "Bell",
-          title: "Smart Notifications",
-          description: "Reach users on the right channel at the right time.",
+          icon: "TrendingUp",
+          title: "30일 트렌드",
+          description: "한 달간 집중도 변화를 라인 차트로.",
           href: null,
         },
       ],
@@ -266,119 +257,70 @@ export const siteConfig: SiteConfig = {
   testimonials: [
     {
       quote:
-        "Acme SaaS cut our development time in half. We launched our product in just two weeks.",
-      name: "Jane Doe",
-      role: "CTO",
-      company: "TechCorp",
+        "포모도로 기법을 써보니 실제로 집중력이 올라갔어요. 통계로 확인하니 동기부여도 됩니다!",
+      name: "김민준",
+      role: "프론트엔드 개발자",
+      company: "스타트업",
       companyLogo: null,
-      avatar: "https://i.pravatar.cc/64?img=47",
+      avatar: null,
     },
     {
       quote:
-        "The best boilerplate we've used. Auth, billing, and dashboard — all production-ready from day one.",
-      name: "Alex Kim",
-      role: "Founder",
-      company: "Launchpad",
+        "25분 단위로 쪼개니까 긴 프로젝트도 부담 없이 시작할 수 있어요. 타이머만 켜면 되니까요.",
+      name: "이서연",
+      role: "대학생",
+      company: "고려대학교",
       companyLogo: null,
-      avatar: "https://i.pravatar.cc/64?img=12",
+      avatar: null,
     },
   ],
 
-  integrations: {
-    title: "Connects with your stack",
-    description: "Plug into the tools your team already uses. No migration required.",
-    cta: { text: "View all integrations", href: "/#integrations" },
-    items: [
-      { name: "Stripe", icon: "CreditCard", href: "https://stripe.com" },
-      { name: "Slack", icon: "MessageSquare", href: "https://slack.com" },
-      { name: "GitHub", icon: "GitBranch", href: "https://github.com" },
-      { name: "Notion", icon: "FileText", href: "https://notion.so" },
-      { name: "Figma", icon: "Layers", href: "https://figma.com" },
-      { name: "Vercel", icon: "Triangle", href: "https://vercel.com" },
-    ],
-  },
+  integrations: null,
 
   cta: {
-    title: "Ready to get started?",
-    subtitle: "Join thousands of teams already using Acme SaaS.",
-    button: { text: "Start for free", href: "/dashboard" },
+    title: "지금 바로 집중을 시작하세요",
+    subtitle: "로그인 없이도 타이머를 사용할 수 있습니다.",
+    button: { text: "타이머 시작", href: "/timer" },
   },
 
   pricing: {
     plans: [
       {
         id: "free",
-        name: "Free",
-        price: "$0",
+        name: "무료",
+        price: "₩0",
         features: [
-          "Up to 3 projects",
-          "Basic analytics",
-          "Community support",
-          "1GB storage",
+          "무제한 포모도로 타이머",
+          "카테고리 관리",
+          "7일/30일 통계",
+          "브라우저 알림",
         ],
-        cta: "Get Started",
-        href: "/dashboard",
-      },
-      {
-        id: "pro",
-        name: "Pro",
-        price: "$19/mo",
-        features: [
-          "Unlimited projects",
-          "Advanced analytics",
-          "Priority support",
-          "100GB storage",
-          "Custom domains",
-          "Team collaboration",
-        ],
-        highlighted: true,
-        cta: "Upgrade to Pro",
+        cta: "시작하기",
+        href: "/timer",
       },
     ],
   },
 
   legal: {
-    companyName: "Acme Inc.",
-    country: "United States",
+    companyName: "Pomodoro Tracker",
+    country: "South Korea",
     effectiveDate: "2026-01-01",
   },
 
-  about: {
-    headline: "We're building the future of SaaS tooling.",
-    story:
-      "Acme started in 2024 with a simple idea: launching a SaaS product shouldn't take months. We've been building tools that help developers ship faster, so they can focus on solving real problems for their users.",
-    mission: {
-      title: "Our Mission",
-      description:
-        "To eliminate repetitive setup work and let every developer launch a production-ready SaaS in days, not months.",
-    },
-    values: [
-      {
-        title: "Ship Fast",
-        description: "We believe in rapid iteration and getting products in front of users quickly.",
-      },
-      {
-        title: "Stay Simple",
-        description: "Complexity is the enemy. We keep our tools lean and focused.",
-      },
-      {
-        title: "Open by Default",
-        description: "Transparency builds trust. We share our work openly whenever we can.",
-      },
-    ],
-    team: [
-      { name: "Jane Doe", role: "Founder & CEO", image: null, link: null },
-      { name: "John Smith", role: "CTO", image: null, link: null },
-    ],
-  },
+  about: null,
 
   dashboardMenu: [
-    { label: "Kanban", href: "/dashboard/kanban", icon: "Kanban" },
-    { label: "History", href: "/dashboard/history", icon: "History" },
+    { label: "통계", href: "/dashboard", icon: "BarChart3" },
+    { label: "카테고리", href: "/categories", icon: "Tag" },
   ],
 
-  social: {
-    twitter: "https://twitter.com/acme",
-    github: "https://github.com/acme",
+  emptyState: {
+    icon: "Coffee",
+    title: "아직 완료한 포모도로가 없어요",
+    description: "타이머를 시작해서 첫 사이클을 완료해보세요",
+    ctaText: "타이머 시작",
+    ctaHref: "/timer",
   },
+
+  social: null,
 };

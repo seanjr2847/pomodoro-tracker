@@ -27,6 +27,8 @@ model User {
   generations   Generation[]
   kanbanCards   KanbanCard[]
   sharedLinks   SharedLink[]
+  categories    Category[]
+  pomodoroSessions PomodoroSession[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -170,4 +172,36 @@ model SharedLink {
   @@index([slug])
   @@index([userId, resourceType])
   @@map("shared_links")
+}
+
+model Category {
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  color            String
+  pomodoroSessions PomodoroSession[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([userId])
+  @@map("categories")
+}
+
+model PomodoroSession {
+  id          String    @id @default(cuid())
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  durationMin Int
+  type        String
+  note        String?
+  startedAt   DateTime
+  completedAt DateTime
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, completedAt])
+  @@index([categoryId])
+  @@map("pomodoro_sessions")
 }
