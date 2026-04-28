@@ -7,9 +7,9 @@ import type { SiteConfig } from "@/config/site";
 type Section = SiteConfig["sections"][number];
 
 const cardGradients = [
-  "conic-gradient(from 270deg, #F4950C, #EB5C0C, transparent, transparent)",
-  "conic-gradient(from 270deg, #3A8BFD, #855AFC, transparent, transparent)",
-  "conic-gradient(from 270deg, #5CFF80, #0EA5E9, transparent, transparent)",
+  "conic-gradient(from 270deg, #E84A5F, #F06477, transparent, transparent)",
+  "conic-gradient(from 270deg, #7BC8A4, #E84A5F, transparent, transparent)",
+  "conic-gradient(from 270deg, #F06477, #7BC8A4, transparent, transparent)",
 ];
 
 export function FeatureSection({ section }: { section: Section }) {

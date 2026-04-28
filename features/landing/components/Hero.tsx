@@ -15,17 +15,17 @@ export function Hero() {
           className="text-neutral-200 [mask-image:radial-gradient(ellipse_80%_60%_at_50%_60%,black_40%,transparent)] dark:text-neutral-700"
         />
 
-        {/* Gradient blobs — dub.co style */}
+        {/* Gradient blobs — spec.md colors */}
         <div
           className="pointer-events-none absolute inset-0 opacity-40 blur-[100px] dark:opacity-25"
           style={{
             background: `
-              radial-gradient(77% 116% at 37% 67%, #EEA5BA, rgba(238,165,186,0) 50%),
-              radial-gradient(56% 84% at 34% 56%, #3A8BFD, rgba(58,139,253,0) 50%),
-              radial-gradient(85% 127% at 100% 100%, #E4C795, rgba(228,199,149,0) 50%),
-              radial-gradient(82% 122% at 3% 29%, #855AFC, rgba(133,90,252,0) 50%),
-              radial-gradient(90% 136% at 52% 100%, #FD3A4E, rgba(253,58,78,0) 50%),
-              radial-gradient(102% 143% at 92% 7%, #72FE7D, rgba(114,254,125,0) 50%)
+              radial-gradient(77% 116% at 37% 67%, #E84A5F, rgba(232,74,95,0) 50%),
+              radial-gradient(56% 84% at 34% 56%, #F06477, rgba(240,100,119,0) 50%),
+              radial-gradient(85% 127% at 100% 100%, #7BC8A4, rgba(123,200,164,0) 50%),
+              radial-gradient(82% 122% at 3% 29%, #E84A5F, rgba(232,74,95,0) 50%),
+              radial-gradient(90% 136% at 52% 100%, #F06477, rgba(240,100,119,0) 50%),
+              radial-gradient(102% 143% at 92% 7%, #7BC8A4, rgba(123,200,164,0) 50%)
             `,
           }}
         />
