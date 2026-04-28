@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/features/auth";
 import { getCategoriesAction, CategoryForm, CategoryList } from "@/features/categories";
-import { Tag } from "lucide-react";
+import { Tag, Lock } from "lucide-react";
 import { Card } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 
 export const metadata = {
   title: "카테고리 관리 | Pomodoro Tracker",
@@ -11,8 +12,24 @@ export const metadata = {
 
 export default async function CategoriesPage() {
   const session = await auth();
+
   if (!session?.user?.id) {
-    redirect("/dashboard");
+    return (
+      <div className="container mx-auto max-w-5xl px-4 py-12">
+        <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+          <Lock className="h-16 w-16 text-muted-foreground" />
+          <h1 className="mt-6 text-3xl font-bold">로그인이 필요한 기능이에요</h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            카테고리 관리는 로그인 후 이용하실 수 있습니다
+          </p>
+          <Button asChild size="lg" className="mt-6">
+            <Link href="/login">
+              로그인하기
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   const result = await getCategoriesAction();
