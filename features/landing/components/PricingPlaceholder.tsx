@@ -20,9 +20,9 @@ export function PricingPlaceholder() {
     <section className="mx-auto max-w-screen-lg px-3 py-20 lg:px-4 xl:px-0">
       <AnimateOnScroll animation="slide-up-fade">
         <div className="text-center">
-          <h2 className="font-sans text-3xl font-medium tracking-tight text-neutral-900 sm:text-4xl dark:text-white">Pricing</h2>
+          <h1 className="font-sans text-3xl font-medium tracking-tight text-neutral-900 sm:text-4xl dark:text-white">요금제</h1>
           <p className="mt-4 text-lg text-neutral-700 dark:text-neutral-300">
-            Simple pricing for everyone.
+            간편한 요금제를 확인하세요
           </p>
         </div>
       </AnimateOnScroll>
@@ -37,7 +37,7 @@ export function PricingPlaceholder() {
             >
               {plan.highlighted && (
                 <Badge className="absolute -top-3 right-4 bg-[var(--site-primary)] text-white">
-                  Popular
+                  인기
                 </Badge>
               )}
               <CardHeader>
@@ -59,7 +59,7 @@ export function PricingPlaceholder() {
                   </Button>
                 ) : (
                   <Button variant="outline" className="mt-6 w-full" disabled>
-                    Coming Soon
+                    곧 출시
                   </Button>
                 )}
               </CardContent>
