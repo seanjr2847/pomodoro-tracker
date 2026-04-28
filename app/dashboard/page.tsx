@@ -9,7 +9,7 @@ import {
   WeeklyChart,
   CategoryPieChart,
 } from "@/features/statistics";
-import { BarChart3, Coffee } from "lucide-react";
+import { BarChart3, Coffee, Loader2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 
@@ -104,9 +104,20 @@ async function DashboardContent() {
   );
 }
 
+function DashboardLoadingFallback() {
+  return (
+    <div className="container mx-auto max-w-5xl px-4 py-12">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="text-lg text-muted-foreground">통계를 불러오는 중...</p>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div>로딩 중...</div>}>
+    <Suspense fallback={<DashboardLoadingFallback />}>
       <DashboardContent />
     </Suspense>
   );
