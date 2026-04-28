@@ -10,7 +10,7 @@ describe("Pricing", () => {
     siteConfig.pricing.plans.forEach((plan) => {
       expect(plan.id).toBeTruthy();
       expect(plan.name).toBeTruthy();
-      expect(plan.price).toMatch(/\$/);
+      expect(plan.price).toMatch(/₩|원|\$/);
       expect(plan.cta).toBeTruthy();
       expect(Array.isArray(plan.features)).toBe(true);
     });

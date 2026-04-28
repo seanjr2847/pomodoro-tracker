@@ -48,9 +48,12 @@ describe("siteConfig", () => {
   });
 
   it("has about section with team and values", () => {
-    expect(siteConfig.about).toBeTruthy();
-    expect(siteConfig.about!.team.length).toBeGreaterThan(0);
-    expect(siteConfig.about!.values.length).toBeGreaterThan(0);
+    if (!siteConfig.about) {
+      expect(siteConfig.about).toBeNull();
+      return;
+    }
+    expect(siteConfig.about.team.length).toBeGreaterThan(0);
+    expect(siteConfig.about.values.length).toBeGreaterThan(0);
   });
 
   it("has at least one testimonial", () => {

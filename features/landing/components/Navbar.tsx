@@ -9,9 +9,9 @@ import { SignInButton } from "@/features/auth";
 import { cn } from "@/shared/utils/cn";
 
 const navLinks = [
-  { label: "Features", href: "/#features" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
+  { label: "기능", href: "/#features" },
+  { label: "요금제", href: "/pricing" },
+  { label: "블로그", href: "/blog" },
 ];
 
 export function Navbar() {
@@ -54,11 +54,11 @@ export function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden items-center gap-2 lg:flex">
-          <SignInButton variant="ghost" className="h-8 rounded-lg px-4 text-[0.8125rem]" label="Log in" />
+          <SignInButton variant="ghost" className="h-8 rounded-lg px-4 text-[0.8125rem]" label="로그인" />
           <SignInButton
             variant="default"
             className="btn-brand h-8 rounded-lg px-4 text-[0.8125rem] hover:ring-4 hover:ring-[color-mix(in_oklab,var(--site-primary)_25%,transparent)]"
-            label="Sign Up"
+            label="회원가입"
           />
         </div>
 
@@ -82,8 +82,8 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="mt-4 flex flex-col gap-2">
-                <SignInButton variant="outline" className="h-10 rounded-lg border border-neutral-300 bg-white text-sm dark:border-white/20 dark:bg-transparent" label="Log in" />
-                <SignInButton variant="default" className="btn-brand h-10 rounded-lg text-sm" label="Sign Up" />
+                <SignInButton variant="outline" className="h-10 rounded-lg border border-neutral-300 bg-white text-sm dark:border-white/20 dark:bg-transparent" label="로그인" />
+                <SignInButton variant="default" className="btn-brand h-10 rounded-lg text-sm" label="회원가입" />
               </div>
             </div>
           </SheetContent>

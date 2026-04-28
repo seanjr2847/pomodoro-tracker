@@ -31,21 +31,21 @@ async function DashboardContent() {
   ]);
 
   const todayStats =
-    todayResult.status === "fulfilled" && todayResult.value.success
+    todayResult.status === "fulfilled" && todayResult.value.success && todayResult.value.data
       ? todayResult.value.data
       : { totalMinutes: 0, sessionCount: 0 };
 
   const weeklyStats =
-    weeklyResult.status === "fulfilled" && weeklyResult.value.success
+    weeklyResult.status === "fulfilled" && weeklyResult.value.success && weeklyResult.value.data
       ? weeklyResult.value.data
       : [];
 
   const categoryStats =
-    categoryResult.status === "fulfilled" && categoryResult.value.success
+    categoryResult.status === "fulfilled" && categoryResult.value.success && categoryResult.value.data
       ? categoryResult.value.data
       : [];
 
-  const hasAnyData = todayStats.sessionCount > 0 || categoryStats.length > 0;
+  const hasAnyData = (todayStats?.sessionCount ?? 0) > 0 || categoryStats.length > 0;
 
   if (!hasAnyData) {
     return (
