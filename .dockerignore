@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env*.local
+.vercel
+coverage
+*.md
+!README.md
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+.playwright-mcp
+.serena
+_workspace

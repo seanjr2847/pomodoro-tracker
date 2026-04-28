@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Log out",
+    "signInWithGoogle": "Sign in with Google",
+    "getStarted": "Get Started"
+  },
+  "dashboard": {
+    "home": "Home",
+    "settings": "Settings",
+    "emptyState": {
+      "title": "No projects yet",
+      "description": "Get started by creating your first project. It only takes a minute.",
+      "cta": "Create Project"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings.",
+    "profile": "Profile",
+    "profileDescription": "Your personal information from Google.",
+    "subscription": "Subscription",
+    "subscriptionDescription": "Manage your subscription plan.",
+    "dangerZone": "Danger Zone",
+    "dangerDescription": "Permanently delete your account and all associated data.",
+    "deleteAccount": "Delete Account",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmDescription": "This action cannot be undone. This will permanently delete your account and all associated data.",
+    "deleteConfirmCancel": "Cancel",
+    "deleteConfirmAction": "Delete Account"
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred.",
+    "tryAgain": "Try again",
+    "pageNotFound": "Page not found",
+    "pageNotFoundDescription": "The page you're looking for doesn't exist.",
+    "goHome": "Go home",
+    "goToDashboard": "Go to Dashboard"
+  }
+}
